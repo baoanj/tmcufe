@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="regist-box">
-    <p>用户注册</p>
+    <p class="regist-title">用户注册</p>
     <el-form
       :model="ruleForm"
       status-icon
@@ -9,7 +9,7 @@
       label-width="100px"
     >
       <el-form-item label="邮箱" prop="email">
-        <el-input type="email" v-model="ruleForm.email" auto-complete="on"></el-input>
+        <el-input v-model="ruleForm.email" auto-complete="on"></el-input>
       </el-form-item>
       <el-form-item label="姓名" prop="name">
         <el-input v-model="ruleForm.name" auto-complete="on"></el-input>
@@ -18,10 +18,10 @@
         <el-input v-model="ruleForm.stuId" auto-complete="on"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="ruleForm.password"></el-input>
+        <el-input type="password" v-model="ruleForm.password" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="确认密码" prop="checkPass">
-        <el-input type="password" v-model="ruleForm.checkPass"></el-input>
+        <el-input type="password" v-model="ruleForm.checkPass" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item>
         <el-radio-group v-model="ruleForm.role">
@@ -30,8 +30,12 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
+        <el-button
+          class="submit-btn"
+          type="primary"
+          @click="submitForm('ruleForm')"
+        >提交</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -56,8 +60,15 @@ export default {
         });
       }
     };
-    const checkText = (rule, value, callback) => {
+    const checkName = (rule, value, callback) => {
       if (!value) {
+        callback(new Error('必填'));
+      } else {
+        callback();
+      }
+    };
+    const checkStuId = (rule, value, callback) => {
+      if (!value && this.ruleForm.role === 'student') {
         callback(new Error('必填'));
       } else {
         callback();
@@ -96,10 +107,10 @@ export default {
           { validator: checkEmail, trigger: 'blur' },
         ],
         name: [
-          { validator: checkText, trigger: 'blur' },
+          { validator: checkName, trigger: 'blur' },
         ],
         stuId: [
-          { validator: checkText, trigger: 'blur' },
+          { validator: checkStuId, trigger: 'blur' },
         ],
         password: [
           { validator: validatePass, trigger: 'blur' },
@@ -121,6 +132,7 @@ export default {
             password: this.ruleForm.password,
             role: this.ruleForm.role,
           }).then(() => {
+            this.$message.success('注册成功，请登录');
             this.$router.push('login');
           }).catch((error) => {
             this.$message.error(error);
@@ -136,8 +148,22 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.regist-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  padding-bottom: 20px;
+}
+
 .regist-box {
   width: 500px;
   margin: 0 auto;
+  background-color: #fff;
+  box-shadow: 0 4px 2.4rem -0.4rem #9da5ab;
+  padding: 20px 30px 1px 0;
+}
+
+.submit-btn {
+  float: right;
 }
 </style>

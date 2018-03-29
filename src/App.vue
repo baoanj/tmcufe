@@ -1,10 +1,10 @@
 <template>
-  <div id="app">
+  <div>
     <el-container>
-      <el-header>
+      <el-header class="top-header">
         <top-header />
       </el-header>
-      <el-main>
+      <el-main class="main-container">
         <router-view/>
       </el-main>
     </el-container>
@@ -22,12 +22,16 @@ export default {
 };
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<style lang="css" scoped>
+.top-header {
+  box-shadow: 0 0 2.25rem #9da5ab;
+  background-color: #fff;
+  line-height: 60px;
+  z-index: 2;
+}
+
+.main-container {
+  background-color: #eee;
+  min-height: calc(100vh - 60px);
 }
 </style>

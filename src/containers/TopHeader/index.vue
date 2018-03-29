@@ -1,15 +1,17 @@
 <template lang="html">
-  <div class="top-header">
+  <div>
     <el-row>
       <el-col :span="12">
-        <router-link to="/">高校教学管理系统</router-link>
+        <router-link class="header-link" to="/">高校教学管理系统</router-link>
       </el-col>
       <el-col :span="12">
-        <div v-if="user.name" class="">
-          <p>{{ user.name }} {{ user.role | roleFilter(user.stuId) }} 欢迎你!</p>
-          <el-button @click="logout">退出</el-button>
+        <div v-if="user.name" class="profile">
+          <span class="profile-msg">
+            {{ user.name }} {{ user.role | roleFilter(user.stuId) }} 欢迎你!
+          </span>
+          <el-button size="mini" @click="logout">退出</el-button>
         </div>
-        <div v-else class="">
+        <div v-else class="profile">
           <el-button type="primary" @click="login">登录</el-button>
           <el-button @click="regist">注册</el-button>
         </div>
@@ -58,4 +60,19 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.header-link {
+  color: #3492ff;
+  text-decoration: none;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.profile {
+  float: right;
+}
+
+.profile-msg {
+  color: #3492ff;
+  margin-right: 20px;
+}
 </style>
