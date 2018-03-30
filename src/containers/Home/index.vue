@@ -14,7 +14,8 @@
     </div>
     <div>
       <class-card
-        v-for="classs in classes" :key="classs.classId"
+        v-for="classs in classes"
+        :key="classs.classId"
         :classs="classs"
       />
     </div>

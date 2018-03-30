@@ -2,27 +2,19 @@
   <div class="box-card">
     <el-card>
       <div slot="header" class="clearfix">
-        <span>{{ classs.name }}</span>
-        <router-link
-          :to="{ name: 'ClassPage', params: { classId: classs.classId } }"
-        >进入</router-link>
+        <span>{{ homework.title }}</span>
+        <!-- <router-link>进入</router-link> -->
         <el-button
           v-if="user.role === 'teacher'"
           class="card-text-btn"
           type="text"
-        >编辑</el-button>
-        <el-button
-          v-if="user.role === 'student'"
-          class="card-text-btn"
-          type="text"
-        >退出</el-button>
+        >删除</el-button>
       </div>
       <div>
-        <p>班级Id: {{ classs.classId }}</p>
-        <p>密码: {{ classs.password }}</p>
-        <p v-if="classs.teacherName">任课老师: {{ classs.teacherName }}</p>
-        <p>作业数量: {{ classs.anountOfHws }}</p>
-        <p>学生数量: {{ classs.amountOfStus }}</p>
+        <p>创建时间: {{ formateDate(homework.createDate) }}</p>
+        <p>开始时间: {{ formateDate(homework.beginDate) }}</p>
+        <p>结束时间: {{ formateDate(homework.endDate) }}</p>
+        <p>提交人数: {{ homework.amountOfSubs }}</p>
       </div>
     </el-card>
   </div>
@@ -30,11 +22,12 @@
 
 <script>
 import { mapState } from 'vuex';
+import utils from '@/utils';
 
 export default {
-  name: 'ClassCard',
+  name: 'HomeworkItem',
   props: {
-    classs: {
+    homework: {
       type: Object,
       default() {
         return {};
@@ -44,6 +37,11 @@ export default {
   computed: mapState([
     'user',
   ]),
+  methods: {
+    formateDate(timestamp) {
+      return utils.formateDate(timestamp);
+    },
+  },
 };
 </script>
 

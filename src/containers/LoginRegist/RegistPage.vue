@@ -133,7 +133,7 @@ export default {
             role: this.ruleForm.role,
           }).then(() => {
             this.$message.success('注册成功，请登录');
-            this.$router.push('login');
+            this.$router.push('/login');
           }).catch((error) => {
             this.$message.error(error);
           });

@@ -34,15 +34,15 @@ export default {
   },
   methods: {
     login() {
-      this.$router.push('login');
+      this.$router.push('/login');
     },
     regist() {
-      this.$router.push('regist');
+      this.$router.push('/regist');
     },
     logout() {
       uerLogout().then(() => {
         this.refreshHeader();
-        this.$router.push('login');
+        this.$router.push('/login');
       }).catch((error) => {
         this.$message.error(error);
       });
