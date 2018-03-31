@@ -1,12 +1,12 @@
 <template lang="html">
-  <div v-if="user.name">
+  <div v-if="user.name && classs.classId">
     <div>
       <router-link to="/">回主页</router-link>
     </div>
     <div>
       <p>{{ classs.name }}</p>
       <p>
-        <span>班级Id: {{this.$route.params.classId}}</span>
+        <span>班级Id: {{ classs.classId }}</span>
         <span>密码: {{ classs.password }}</span>
         <span>任课教师: {{ classs.teacherName }}</span>
       </p>
@@ -16,6 +16,7 @@
       <homework-item
         v-for="homework in classs.homeworks"
         :key="homework.createDate"
+        :classId="classs.classId"
         :homework="homework"
       />
     </div>
@@ -28,6 +29,7 @@
           <homework-item
             v-for="homework in classs.homeworks"
             :key="homework.createDate"
+            :classId="classs.classId"
             :homework="homework"
           />
         </div>
@@ -37,14 +39,14 @@
         <div>
           <students-table
             :students="classs.students"
-            :classId="this.$route.params.classId"
+            :classId="classs.classId"
           />
         </div>
       </el-tab-pane>
     </el-tabs>
     <add-homework-dialog
       :dialogVisible="addHwDialogVisible"
-      :classId="this.$route.params.classId"
+      :classId="classs.classId"
       @hideDialog="addHwDialogVisible = false"
       @fetchData="fetchData()"
     />
@@ -74,6 +76,7 @@ export default {
   data() {
     return {
       classs: {
+        classId: '',
         name: '',
         teacherName: '',
         password: '',

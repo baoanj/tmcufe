@@ -5,6 +5,7 @@ import RegistPage from '@/containers/LoginRegist/RegistPage';
 import LoginPage from '@/containers/LoginRegist/LoginPage';
 import ClassPage from '@/containers/ClassPage';
 import NotFound from '@/containers/NotFound';
+import HomeworkPage from '@/containers/HomeworkPage';
 
 Vue.use(Router);
 
@@ -30,6 +31,11 @@ export default new Router({
       path: '/class/:classId',
       name: 'ClassPage',
       component: ClassPage,
+    },
+    {
+      path: '/hw/:classId/:createDate',
+      name: 'HomeworkPage',
+      component: HomeworkPage,
     },
     {
       path: '/*',

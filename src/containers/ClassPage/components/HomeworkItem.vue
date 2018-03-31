@@ -3,7 +3,12 @@
     <el-card>
       <div slot="header" class="clearfix">
         <span>{{ homework.title }}</span>
-        <!-- <router-link>进入</router-link> -->
+        <router-link
+          :to="{
+            name: 'HomeworkPage',
+            params: { classId, createDate: homework.createDate }
+          }"
+        >进入</router-link>
         <el-button
           v-if="user.role === 'teacher'"
           class="card-text-btn"
@@ -32,6 +37,10 @@ export default {
       default() {
         return {};
       },
+    },
+    classId: {
+      type: String,
+      default: '',
     },
   },
   computed: mapState([

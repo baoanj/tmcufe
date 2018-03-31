@@ -2,7 +2,7 @@ import axios from '@/utils/axios';
 
 export function getClassHwsData(classId) {
   return new Promise((resolve, reject) => {
-    axios.get(`/api/general/getHws/${classId}`)
+    axios.get('/api/general/getHws', { classId })
       .then((result) => {
         if (result.stats === 1) {
           resolve(result.data.class);
