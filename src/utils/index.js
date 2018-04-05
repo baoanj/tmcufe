@@ -13,4 +13,60 @@ export default {
   zeroFill(num) {
     return `0${num}`.slice(-2);
   },
+
+  isString(str) {
+    return typeof str === 'string';
+  },
+
+  isArray(v) {
+    // https://msdn.microsoft.com/en-us/library/gg622930(v=vs.85).aspx
+    return ({}).toString.apply(v) === '[object Array]';
+  },
+
+  isPureObject(v) {
+    return ({}).toString.apply(v) === '[object Object]';
+  },
+
+  isInteger(obj) {
+    return typeof obj === 'number' && obj % 1 === 0;
+  },
+
+  isPositiveInteger(obj) {
+    return typeof obj === 'number' && obj % 1 === 0 && obj > 0;
+  },
+
+  isNaturalNumber(obj) {
+    return typeof obj === 'number' && obj % 1 === 0 && obj >= 0;
+  },
+
+  isIntegerStr(str) {
+    return typeof str === 'string' && /^-?\d+$/.test(str);
+  },
+
+  isNaturalNumberStr(str) {
+    return typeof str === 'string' && /^\d+$/.test(str);
+  },
+
+  isPositiveIntegerStr(str) {
+    return typeof str === 'string' && /^[0-9]*[1-9][0-9]*$/.test(str);
+  },
+
+  isFloatStr(str) {
+    return typeof str === 'string' && /^(-?\d+)(\.\d+)?$/.test(str);
+  },
+
+  validEmail(email) {
+    const pattern = /^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]+$/; // eslint-disable-line
+    return pattern.test(email);
+  },
+
+  validPhone(phone) {
+    const pattern = /^1[3|4|5|7|8][0-9]\d{8}$/;
+    return pattern.test(phone);
+  },
+
+  validPassword(pwd) {
+    const pattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[a-zA-Z0-9^\S]{6,32}$/;
+    return pattern.test(pwd);
+  },
 };

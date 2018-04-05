@@ -48,7 +48,7 @@ export default {
   ]),
   methods: {
     formateDate(timestamp) {
-      return utils.formateDate(timestamp);
+      return utils.formateDate(+timestamp);
     },
   },
 };

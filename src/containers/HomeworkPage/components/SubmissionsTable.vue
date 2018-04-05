@@ -67,7 +67,7 @@ export default {
       default: '',
     },
     createDate: {
-      type: Number,
+      type: String,
       default: Date.now(),
     },
   },
@@ -88,7 +88,7 @@ export default {
       return (row.checked && cellValue) || (row.checked && '无') || '--';
     },
     formateDate(timestamp) {
-      return utils.formateDate(timestamp);
+      return utils.formateDate(+timestamp);
     },
   },
 };

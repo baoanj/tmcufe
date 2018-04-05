@@ -1,5 +1,5 @@
 <template lang="html">
-  <el-dialog title="学生提交详情" :visible="visible" @close="closeDialog">
+  <el-dialog title="学生提交详情" width="80%" :visible="visible" @close="closeDialog">
     <p>
       <span>学生: {{ submission.stuName}}({{ submission.stuId }})</span>
       <span>提交时间: {{ formateDate(submission.date) }}</span>
@@ -7,7 +7,11 @@
     <div>
       <p>提交内容:</p>
       <p>{{ submission.answer }}</p>
-      <p>{{ submission.file }}</p>
+      <markdown-editor
+        :value="submission.answer"
+        :edit="false"
+      />
+      <file-list :files="submission.files" />
     </div>
     <div>
       <p v-if="submission.checked">
@@ -34,6 +38,8 @@
 </template>
 
 <script>
+import MarkdownEditor from '@/components/MarkdownEditor';
+import FileList from '@/components/FileList';
 import utils from '@/utils';
 import { checkStuSub } from '../api';
 
@@ -45,9 +51,13 @@ export default {
       default: '',
     },
     createDate: {
-      type: Number,
+      type: String,
       default: Date.now(),
     },
+  },
+  components: {
+    MarkdownEditor,
+    FileList,
   },
   data() {
     return {
@@ -78,7 +88,7 @@ export default {
       this.submission.email = row.email;
       this.submission.date = row.date;
       this.submission.answer = row.answer;
-      this.submission.file = row.file;
+      this.submission.files = row.files;
       this.submission.checked = row.checked;
       this.submission.feedback = row.feedback;
     },
@@ -96,7 +106,7 @@ export default {
       });
     },
     formateDate(timestamp) {
-      return utils.formateDate(timestamp);
+      return utils.formateDate(+timestamp);
     },
   },
 };

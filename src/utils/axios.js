@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 export default {
-  get(url, params) {
+  get(url, params, responseType) {
     return new Promise((resolve, reject) => {
-      axios.get(url, { params })
+      axios.get(url, { params, responseType })
         .then((res) => {
           resolve(res.data);
         })

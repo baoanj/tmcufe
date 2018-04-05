@@ -1,5 +1,5 @@
 <template lang="html">
-  <el-dialog title="创建作业" :visible="dialogVisible" @close="closeDialog">
+  <el-dialog title="创建作业" width="80%" :visible="dialogVisible" @close="closeDialog">
     <el-form
       :model="ruleForm"
       status-icon
@@ -11,11 +11,10 @@
         <el-input v-model="ruleForm.title"></el-input>
       </el-form-item>
       <el-form-item label="作业详情" prop="description">
-        <el-input
-          type="textarea"
-          :rows="2"
-          v-model="ruleForm.description"
-        ></el-input>
+        <markdown-editor
+          :value="ruleForm.description"
+          @change="(val) => ruleForm.description = val"
+        />
       </el-form-item>
       <el-form-item label="开始时间" prop="beginDate">
         <el-date-picker
@@ -32,6 +31,7 @@
           :picker-options="pickerOptions"
         ></el-date-picker>
       </el-form-item>
+      <upload-files :files="fileList" @change="val => fileList = val" />
       <el-form-item>
         <el-button @click="closeDialog">取消</el-button>
         <el-button
@@ -45,6 +45,9 @@
 </template>
 
 <script>
+import MarkdownEditor from '@/components/MarkdownEditor';
+import UploadFiles from '@/components/UploadFiles';
+import SimpleFormData from '@/utils/simpleFormData';
 import { addHomework } from '../api';
 
 export default {
@@ -58,6 +61,10 @@ export default {
       type: String,
       default: '',
     },
+  },
+  components: {
+    MarkdownEditor,
+    UploadFiles,
   },
   data() {
     const checkTitle = (rule, value, callback) => {
@@ -75,6 +82,7 @@ export default {
       }
     };
     return {
+      fileList: [],
       ruleForm: {
         title: '',
         description: '',
@@ -132,13 +140,15 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          addHomework(this.classId, {
+          const formData = new SimpleFormData({
+            files: this.fileList,
             createDate: Date.now(),
             title: this.ruleForm.title,
             description: this.ruleForm.description,
             beginDate: this.ruleForm.beginDate.getTime(),
             endDate: this.ruleForm.endDate.getTime(),
-          }).then(() => {
+          });
+          addHomework(this.classId, formData).then(() => {
             this.$emit('hideDialog');
             this.$emit('fetchData');
           }).catch((error) => {
@@ -153,6 +163,7 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+      this.fileList = [];
     },
   },
 };

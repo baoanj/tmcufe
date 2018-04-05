@@ -1,13 +1,10 @@
 <template lang="html">
   <div>
-    <div>
-      <el-input
-        type="textarea"
-        :autosize="{ minRows: 4, maxRows: 10}"
-        placeholder="请输入内容"
-        v-model="answer">
-      </el-input>
-    </div>
+    <markdown-editor
+      value="answer"
+      @change="(val) => answer = val"
+    />
+    <upload-files :files="fileList" @change="val => fileList = val" />
     <div class="submit-btn">
       <el-button type="primary" @click="submitAnswer">提交</el-button>
     </div>
@@ -15,10 +12,17 @@
 </template>
 
 <script>
+import MarkdownEditor from '@/components/MarkdownEditor';
+import UploadFiles from '@/components/UploadFiles';
+import SimpleFormData from '@/utils/simpleFormData';
 import { submitHw } from '../api';
 
 export default {
   name: 'SubmitHomework',
+  components: {
+    MarkdownEditor,
+    UploadFiles,
+  },
   props: {
     classId: {
       type: String,
@@ -32,12 +36,17 @@ export default {
   data() {
     return {
       answer: '',
-      file: '',
+      fileList: [],
     };
   },
   methods: {
     submitAnswer() {
-      submitHw(this.classId, this.createDate, this.answer, this.file, Date.now())
+      const formData = new SimpleFormData({
+        files: this.fileList,
+        answer: this.answer,
+        date: Date.now(),
+      });
+      submitHw(this.classId, this.createDate, formData)
         .then(() => {
           this.$emit('fetchData');
         })

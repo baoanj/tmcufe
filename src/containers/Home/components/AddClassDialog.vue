@@ -1,5 +1,5 @@
 <template lang="html">
-  <el-dialog title="新建班级" :visible="dialogVisible" @close="closeDialog">
+  <el-dialog title="新建班级" width="80%" :visible="dialogVisible" @close="closeDialog">
     <el-form
       :model="ruleForm"
       status-icon
@@ -12,6 +12,12 @@
       </el-form-item>
       <el-form-item label="班级名称" prop="name">
         <el-input v-model="ruleForm.name" auto-complete="on"></el-input>
+      </el-form-item>
+      <el-form-item label="其他信息(选填)" prop="message">
+        <markdown-editor
+          :value="ruleForm.message"
+          @change="(val) => ruleForm.message = val"
+        />
       </el-form-item>
       <el-form-item label="任课教师" prop="teacherName">
         <el-input v-model="ruleForm.teacherName" auto-complete="on"></el-input>
@@ -32,6 +38,7 @@
 </template>
 
 <script>
+import MarkdownEditor from '@/components/MarkdownEditor';
 import { addClass, checkClassIdUnique } from '../api';
 
 export default {
@@ -41,6 +48,9 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  components: {
+    MarkdownEditor,
   },
   data() {
     const checkClassId = (rule, value, callback) => {
@@ -74,6 +84,7 @@ export default {
         name: '',
         teacherName: '',
         password: '',
+        message: '',
       },
       rules: {
         classId: [
@@ -97,6 +108,7 @@ export default {
             name: this.ruleForm.name,
             teacherName: this.ruleForm.teacherName,
             password: this.ruleForm.password,
+            message: this.ruleForm.message,
           }).then(() => {
             this.$emit('hideDialog');
             this.$emit('fetchData');

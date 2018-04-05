@@ -16,13 +16,9 @@ export function getHwSubsData(classId, createDate) {
   });
 }
 
-export function submitHw(classId, createDate, answer, file, date) {
+export function submitHw(classId, createDate, params) {
   return new Promise((resolve, reject) => {
-    axios.post(`/api/student/submitHw/${classId}/${createDate}`, {
-      answer,
-      file,
-      date,
-    }).then((result) => {
+    axios.post(`/api/student/submitHw/${classId}/${createDate}`, params).then((result) => {
       if (result.stats === 0) {
         reject(result.data.error);
       } else {

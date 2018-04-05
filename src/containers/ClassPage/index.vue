@@ -10,21 +10,17 @@
         <span>密码: {{ classs.password }}</span>
         <span>任课教师: {{ classs.teacherName }}</span>
       </p>
-    </div>
-    <div v-if="user.role === 'student'">
-      <p>作业数量: {{ classs.homeworks.length }}</p>
-      <homework-item
-        v-for="homework in classs.homeworks"
-        :key="homework.createDate"
-        :classId="classs.classId"
-        :homework="homework"
+      <markdown-editor
+        :value="classs.message"
+        :edit="false"
       />
     </div>
-    <el-tabs v-if="user.role === 'teacher'" v-model="activeTabName">
+    <el-tabs v-model="activeTabName">
       <el-tab-pane label="作业" name="homework">
-        <div>
+        <div v-if="user.role === 'teacher'">
           <el-button type="primary" @click="addHomework">创建作业</el-button>
         </div>
+        <p>作业数量: {{ classs.homeworks.length }}</p>
         <div>
           <homework-item
             v-for="homework in classs.homeworks"
@@ -34,7 +30,14 @@
           />
         </div>
       </el-tab-pane>
-      <el-tab-pane label="学生" name="student">
+      <el-tab-pane label="课件" name="courseware">
+        <courseware-pane
+          :coursewares="classs.coursewares"
+          :classId="classs.classId"
+          @fetchData="fetchData()"
+        />
+      </el-tab-pane>
+      <el-tab-pane v-if="user.role === 'teacher'" label="学生" name="student">
         <p>学生数量: {{ classs.students.length }}</p>
         <div>
           <students-table
@@ -55,10 +58,12 @@
 
 <script>
 import { mapState } from 'vuex';
+import MarkdownEditor from '@/components/MarkdownEditor';
 import { getClassHwsData } from './api';
 import AddHomeworkDialog from './components/AddHomeworkDialog';
 import HomeworkItem from './components/HomeworkItem';
 import StudentsTable from './components/StudentsTable';
+import CoursewarePane from './components/CoursewarePane';
 
 export default {
   name: 'ClassPage',
@@ -69,6 +74,8 @@ export default {
     AddHomeworkDialog,
     HomeworkItem,
     StudentsTable,
+    CoursewarePane,
+    MarkdownEditor,
   },
   computed: mapState([
     'user',
@@ -80,8 +87,10 @@ export default {
         name: '',
         teacherName: '',
         password: '',
+        message: '',
         students: [],
         homeworks: [],
+        coursewares: [],
       },
       activeTabName: 'homework',
       addHwDialogVisible: false,
