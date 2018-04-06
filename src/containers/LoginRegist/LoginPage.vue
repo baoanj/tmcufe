@@ -1,5 +1,8 @@
 <template lang="html">
   <div class="login-box">
+    <vue-headful
+      title="高校教学管理系统 | 登录"
+    />
     <p class="login-title">用户登录</p>
     <el-form
       :model="ruleForm"

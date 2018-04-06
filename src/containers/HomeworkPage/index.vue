@@ -1,5 +1,8 @@
 <template lang="html">
   <div v-if="user.name && homework.createDate">
+    <vue-headful
+      title="高校教学管理系统 | 作业"
+    />
     <div>
       <router-link :to="`/class/${$route.params.classId}`">回班级主页</router-link>
     </div>
@@ -13,10 +16,12 @@
         <span>创建时间: {{ formateDate(homework.createDate) }}</span>
         <span>开始时间: {{ formateDate(homework.beginDate) }}</span>
         <span>结束时间: {{ formateDate(homework.endDate) }}</span>
-        <span>状态: {{ expired | status }}</span>
+        <span>状态: {{ expired | hwStatus }}</span>
       </p>
       <file-list :files="homework.files" />
-      <el-button @click="hwAnswerDialogVisible = true">查看答案</el-button>
+      <el-button @click="showHwAnswerDialog()">
+        {{ user.role | answerStatus(homework.hwAnswer.answer, homework.hwAnswer.files.length) }}
+      </el-button>
     </div>
     <div v-if="user.role === 'teacher'">
       <p>提交人数: {{ homework.submissions.length }}</p>
@@ -31,12 +36,13 @@
       <div v-if="homework.submissions.length">
         <p>
           <span>已提交</span>
-          <el-button v-if="!homework.submissions[0].checked">撤销提交</el-button>
+          <el-button v-if="!homework.submissions[0].checked && expired === 2">编辑</el-button>
+          <el-button v-if="!homework.submissions[0].checked && expired === 2">撤销</el-button>
         </p>
         <p>
           <span>姓名: {{ homework.submissions[0].stuName }}</span>
           <span>学号: {{ homework.submissions[0].stuId }}</span>
-          <span>提交时间: {{ homework.submissions[0].date }}</span>
+          <span>提交时间: {{ formateDate(homework.submissions[0].date) }}</span>
         </p>
         <div>
           <p v-if="homework.submissions[0].checked">
@@ -63,9 +69,9 @@
       </div>
     </div>
     <hw-answer-dialog
-      :dialogVisible="hwAnswerDialogVisible"
-      :hwAnswer="hw.hwAnswer"
+      ref="hwAnswerDialogRef"
       :classId="$route.params.classId"
+      :createDate="homework.createDate"
       @fetchData="fetchData"
     />
   </div>
@@ -121,7 +127,6 @@ export default {
           files: [],
         },
       },
-      hwAnswerDialogVisible: false,
     };
   },
   methods: {
@@ -137,15 +142,26 @@ export default {
     formateDate(timestamp) {
       return utils.formateDate(+timestamp);
     },
+    showHwAnswerDialog() {
+      this.$refs.hwAnswerDialogRef.show(this.homework.hwAnswer);
+    },
   },
   filters: {
-    status(val) {
+    hwStatus(val) {
       if (val === 0) {
         return '未开始';
       } else if (val === 1) {
         return '已截止';
       }
       return '进行中';
+    },
+    answerStatus(role, answer, length) {
+      if (answer || length) {
+        return '查看答案';
+      } else if (role === 'student') {
+        return '暂无答案';
+      }
+      return '上传答案';
     },
   },
 };

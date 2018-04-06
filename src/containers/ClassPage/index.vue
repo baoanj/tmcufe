@@ -1,5 +1,8 @@
 <template lang="html">
   <div v-if="user.name && classs.classId">
+    <vue-headful
+      title="高校教学管理系统 | 班级"
+    />
     <div>
       <router-link to="/">回主页</router-link>
     </div>

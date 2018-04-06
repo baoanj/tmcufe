@@ -6,7 +6,6 @@
     </p>
     <div>
       <p>提交内容:</p>
-      <p>{{ submission.answer }}</p>
       <markdown-editor
         :value="submission.answer"
         :edit="false"

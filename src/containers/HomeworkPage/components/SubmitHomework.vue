@@ -1,7 +1,7 @@
 <template lang="html">
   <div>
     <markdown-editor
-      value="answer"
+      :value="answer"
       @change="(val) => answer = val"
     />
     <upload-files :files="fileList" @change="val => fileList = val" />
@@ -29,7 +29,7 @@ export default {
       default: '',
     },
     createDate: {
-      type: Number,
+      type: String,
       default: Date.now(),
     },
   },

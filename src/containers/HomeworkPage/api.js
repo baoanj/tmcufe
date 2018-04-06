@@ -45,3 +45,31 @@ export function checkStuSub(classId, createDate, userId, feedback) {
     });
   });
 }
+
+export function uploadHwAnswer(classId, createDate, params) {
+  return new Promise((resolve, reject) => {
+    axios.post(`/api/teacher/uploadHwAnswer/${classId}/${createDate}`, params).then((result) => {
+      if (result.stats === 0) {
+        reject(result.data.error);
+      } else {
+        resolve();
+      }
+    }).catch(() => {
+      reject('网络错误');
+    });
+  });
+}
+
+export function deleteHwAnswer(classId, createDate) {
+  return new Promise((resolve, reject) => {
+    axios.put(`/api/teacher/deleteHwAnswer/${classId}/${createDate}`).then((result) => {
+      if (result.stats === 0) {
+        reject(result.data.error);
+      } else {
+        resolve();
+      }
+    }).catch(() => {
+      reject('网络错误');
+    });
+  });
+}

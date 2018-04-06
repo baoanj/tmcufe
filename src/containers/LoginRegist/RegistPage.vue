@@ -1,5 +1,8 @@
 <template lang="html">
   <div class="regist-box">
+    <vue-headful
+      title="高校教学管理系统 | 注册"
+    />
     <p class="regist-title">用户注册</p>
     <el-form
       :model="ruleForm"

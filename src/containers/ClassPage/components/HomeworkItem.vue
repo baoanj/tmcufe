@@ -13,7 +13,7 @@
           v-if="user.role === 'teacher'"
           class="card-text-btn"
           type="text"
-        >删除</el-button>
+        >编辑</el-button>
       </div>
       <div>
         <p>创建时间: {{ formateDate(homework.createDate) }}</p>

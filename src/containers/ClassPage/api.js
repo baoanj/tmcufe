@@ -30,7 +30,7 @@ export function addHomework(classId, params) {
 
 export function uploadCourseware(classId, params) {
   return new Promise((resolve, reject) => {
-    axios.put(`/api/teacher/uploadCourseware/${classId}`, params).then((result) => {
+    axios.post(`/api/teacher/uploadCourseware/${classId}`, params).then((result) => {
       if (result.stats === 0) {
         reject(result.data.error);
       } else {

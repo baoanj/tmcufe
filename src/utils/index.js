@@ -27,6 +27,10 @@ export default {
     return ({}).toString.apply(v) === '[object Object]';
   },
 
+  isFile(v) {
+    return ({}).toString.apply(v) === '[object File]';
+  },
+
   isInteger(obj) {
     return typeof obj === 'number' && obj % 1 === 0;
   },
