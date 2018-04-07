@@ -23,13 +23,13 @@
       v-if="user.role === 'teacher'"
       :dialogVisible="addClassDialogVisible"
       @hideDialog="addClassDialogVisible = false"
-      @fetchData="fetchData()"
+      @fetchData="fetchData"
     />
     <enter-class-dialog
       v-if="user.role === 'student'"
       :dialogVisible="enterClassDialogVisible"
       @hideDialog="enterClassDialogVisible = false"
-      @fetchData="fetchData()"
+      @fetchData="fetchData"
     />
   </div>
 </template>

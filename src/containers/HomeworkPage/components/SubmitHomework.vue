@@ -6,7 +6,19 @@
     />
     <upload-files :files="fileList" @change="val => fileList = val" />
     <div class="submit-btn">
-      <el-button type="primary" @click="submitAnswer">提交</el-button>
+      <el-button @click="resetAnswer">清空</el-button>
+      <el-button
+        v-if="editing"
+        type="primary"
+        :loading="loading"
+        @click="updateAnswer"
+      >提交</el-button>
+      <el-button
+        v-else
+        type="primary"
+        :loading="loading"
+        @click="submitAnswer"
+      >提交</el-button>
     </div>
   </div>
 </template>
@@ -15,7 +27,8 @@
 import MarkdownEditor from '@/components/MarkdownEditor';
 import UploadFiles from '@/components/UploadFiles';
 import SimpleFormData from '@/utils/simpleFormData';
-import { submitHw } from '../api';
+import utils from '@/utils';
+import { submitHw, updateAnswerApi } from '../api';
 
 export default {
   name: 'SubmitHomework',
@@ -32,11 +45,26 @@ export default {
       type: String,
       default: Date.now(),
     },
+    text: {
+      type: String,
+      default: Date.now(),
+    },
+    files: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+    editing: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
-      answer: '',
-      fileList: [],
+      answer: this.text,
+      fileList: this.files,
+      loading: false,
     };
   },
   methods: {
@@ -46,13 +74,40 @@ export default {
         answer: this.answer,
         date: Date.now(),
       });
+      this.loading = true;
       submitHw(this.classId, this.createDate, formData)
         .then(() => {
+          this.loading = false;
           this.$emit('fetchData');
         })
         .catch((error) => {
+          this.loading = false;
           this.$message.error(error);
         });
+    },
+    updateAnswer() {
+      const realFileList = this.fileList.filter(item => utils.isFile(item));
+      const existFiles = this.fileList.filter(item => utils.isPureObject(item));
+      const formData = new SimpleFormData({
+        files: realFileList,
+        existFiles: JSON.stringify(existFiles),
+        answer: this.answer,
+        date: Date.now(),
+      });
+      this.loading = true;
+      updateAnswerApi(this.classId, this.createDate, formData)
+        .then(() => {
+          this.loading = false;
+          this.$emit('fetchData');
+        })
+        .catch((error) => {
+          this.loading = false;
+          this.$message.error(error);
+        });
+    },
+    resetAnswer() {
+      this.answer = '';
+      this.fileList = [];
     },
   },
 };

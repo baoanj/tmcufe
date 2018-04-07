@@ -41,3 +41,45 @@ export function uploadCourseware(classId, params) {
     });
   });
 }
+
+export function updateCoursewareApi(classId, uploadDate, params) {
+  return new Promise((resolve, reject) => {
+    axios.put(`/api/teacher/updateCourseware/${classId}/${uploadDate}`, params).then((result) => {
+      if (result.stats === 0) {
+        reject(result.data.error);
+      } else {
+        resolve();
+      }
+    }).catch(() => {
+      reject('网络错误');
+    });
+  });
+}
+
+export function deleteCoursewareApi(classId, uploadDate, params) {
+  return new Promise((resolve, reject) => {
+    axios.put(`/api/teacher/deleteCourseware/${classId}/${uploadDate}`, params).then((result) => {
+      if (result.stats === 0) {
+        reject(result.data.error);
+      } else {
+        resolve();
+      }
+    }).catch(() => {
+      reject('网络错误');
+    });
+  });
+}
+
+export function updateClassMsg(classId, params) {
+  return new Promise((resolve, reject) => {
+    axios.put(`/api/teacher/editClass/${classId}`, params).then((result) => {
+      if (result.stats === 0) {
+        reject(result.data.error);
+      } else {
+        resolve();
+      }
+    }).catch(() => {
+      reject('网络错误');
+    });
+  });
+}

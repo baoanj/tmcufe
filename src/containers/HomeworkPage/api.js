@@ -30,6 +30,34 @@ export function submitHw(classId, createDate, params) {
   });
 }
 
+export function updateAnswerApi(classId, createDate, params) {
+  return new Promise((resolve, reject) => {
+    axios.put(`/api/student/editHwSub/${classId}/${createDate}`, params).then((result) => {
+      if (result.stats === 0) {
+        reject(result.data.error);
+      } else {
+        resolve();
+      }
+    }).catch(() => {
+      reject('网络错误');
+    });
+  });
+}
+
+export function deleteHwSubApi(classId, createDate, params) {
+  return new Promise((resolve, reject) => {
+    axios.put(`/api/student/deleteHwSub/${classId}/${createDate}`, params).then((result) => {
+      if (result.stats === 0) {
+        reject(result.data.error);
+      } else {
+        resolve();
+      }
+    }).catch(() => {
+      reject('网络错误');
+    });
+  });
+}
+
 export function checkStuSub(classId, createDate, userId, feedback) {
   return new Promise((resolve, reject) => {
     axios.put(`/api/teacher/feedbackHw/${classId}/${createDate}/${userId}`, {
@@ -63,6 +91,20 @@ export function uploadHwAnswer(classId, createDate, params) {
 export function deleteHwAnswer(classId, createDate) {
   return new Promise((resolve, reject) => {
     axios.put(`/api/teacher/deleteHwAnswer/${classId}/${createDate}`).then((result) => {
+      if (result.stats === 0) {
+        reject(result.data.error);
+      } else {
+        resolve();
+      }
+    }).catch(() => {
+      reject('网络错误');
+    });
+  });
+}
+
+export function updateHomeworkMsg(classId, createDate, params) {
+  return new Promise((resolve, reject) => {
+    axios.put(`/api/teacher/editHw/${classId}/${createDate}`, params).then((result) => {
       if (result.stats === 0) {
         reject(result.data.error);
       } else {

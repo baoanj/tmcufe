@@ -7,7 +7,12 @@
       <router-link to="/">回主页</router-link>
     </div>
     <div>
-      <p>{{ classs.name }}</p>
+      <p>
+        <span>{{ classs.name }}</span>
+        <span v-if="user.role === 'teacher'">
+          <el-button type="text" @click="showEditClassDialog()">编辑班级信息</el-button>
+        </span>
+      </p>
       <p>
         <span>班级Id: {{ classs.classId }}</span>
         <span>密码: {{ classs.password }}</span>
@@ -37,7 +42,7 @@
         <courseware-pane
           :coursewares="classs.coursewares"
           :classId="classs.classId"
-          @fetchData="fetchData()"
+          @fetchData="fetchData"
         />
       </el-tab-pane>
       <el-tab-pane v-if="user.role === 'teacher'" label="学生" name="student">
@@ -54,7 +59,11 @@
       :dialogVisible="addHwDialogVisible"
       :classId="classs.classId"
       @hideDialog="addHwDialogVisible = false"
-      @fetchData="fetchData()"
+      @fetchData="fetchData"
+    />
+    <edit-class-dialog
+      ref="editClassDialogRef"
+      @fetchData="fetchData"
     />
   </div>
 </template>
@@ -67,6 +76,7 @@ import AddHomeworkDialog from './components/AddHomeworkDialog';
 import HomeworkItem from './components/HomeworkItem';
 import StudentsTable from './components/StudentsTable';
 import CoursewarePane from './components/CoursewarePane';
+import EditClassDialog from './components/EditClassDialog';
 
 export default {
   name: 'ClassPage',
@@ -79,6 +89,7 @@ export default {
     StudentsTable,
     CoursewarePane,
     MarkdownEditor,
+    EditClassDialog,
   },
   computed: mapState([
     'user',
@@ -109,6 +120,9 @@ export default {
     },
     addHomework() {
       this.addHwDialogVisible = true;
+    },
+    showEditClassDialog() {
+      this.$refs.editClassDialogRef.show(this.classs);
     },
   },
 };
