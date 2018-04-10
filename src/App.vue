@@ -27,7 +27,6 @@ export default {
   box-shadow: 0 0 2.25rem #9da5ab;
   background-color: #fff;
   line-height: 60px;
-  z-index: 2;
 }
 
 .main-container {

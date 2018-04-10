@@ -1,5 +1,5 @@
 <template lang="html">
-  <div v-if="user.name && classs.classId">
+  <div v-if="$store.state.user.name && classs.classId">
     <vue-headful
       title="高校教学管理系统 | 班级"
     />
@@ -9,7 +9,7 @@
     <div>
       <p>
         <span>{{ classs.name }}</span>
-        <span v-if="user.role === 'teacher'">
+        <span v-if="$store.state.user.role === 'teacher'">
           <el-button type="text" @click="showEditClassDialog()">编辑班级信息</el-button>
         </span>
       </p>
@@ -25,13 +25,13 @@
     </div>
     <el-tabs v-model="activeTabName">
       <el-tab-pane label="作业" name="homework">
-        <div v-if="user.role === 'teacher'">
+        <div v-if="$store.state.user.role === 'teacher'">
           <el-button type="primary" @click="addHomework">创建作业</el-button>
         </div>
         <p>作业数量: {{ classs.homeworks.length }}</p>
         <div>
           <homework-item
-            v-for="homework in classs.homeworks"
+            v-for="homework in reverseHomeworks"
             :key="homework.createDate"
             :classId="classs.classId"
             :homework="homework"
@@ -45,7 +45,7 @@
           @fetchData="fetchData"
         />
       </el-tab-pane>
-      <el-tab-pane v-if="user.role === 'teacher'" label="学生" name="student">
+      <el-tab-pane v-if="$store.state.user.role === 'teacher'" label="学生" name="student">
         <p>学生数量: {{ classs.students.length }}</p>
         <div>
           <students-table
@@ -69,7 +69,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import MarkdownEditor from '@/components/MarkdownEditor';
 import { getClassHwsData } from './api';
 import AddHomeworkDialog from './components/AddHomeworkDialog';
@@ -91,9 +90,6 @@ export default {
     MarkdownEditor,
     EditClassDialog,
   },
-  computed: mapState([
-    'user',
-  ]),
   data() {
     return {
       classs: {
@@ -109,6 +105,11 @@ export default {
       activeTabName: 'homework',
       addHwDialogVisible: false,
     };
+  },
+  computed: {
+    reverseHomeworks() {
+      return this.classs.homeworks.slice().reverse();
+    },
   },
   methods: {
     fetchData() {

@@ -7,7 +7,7 @@
           <div :key="courseware.uploadDate" v-for="courseware in reverseCoursewares">
             <div>
               <span>{{ courseware.title }} {{ formateDate(courseware.uploadDate) }}</span>
-              <span v-if="user.role === 'teacher'">
+              <span v-if="$store.state.user.role === 'teacher'">
                 <el-button type="text" @click="editCourseware(courseware)">编辑</el-button>
                 <el-button type="text" @click="deleteCourseware(courseware)">删除</el-button>
               </span>
@@ -17,7 +17,7 @@
         </div>
       </el-col>
       <el-col :span="12">
-        <div v-if="user.role === 'teacher'">
+        <div v-if="$store.state.user.role === 'teacher'">
           <p>{{ editingCourseware ? `编辑课件-${editingCourseware.title}` : '新增课件'}}</p>
           <el-input placeholder="标题(可选)" v-model="title"></el-input>
           <upload-files :files="fileList" @change="val => fileList = val" />
@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import UploadFiles from '@/components/UploadFiles';
 import FileList from '@/components/FileList';
 import SimpleFormData from '@/utils/simpleFormData';
@@ -64,9 +63,6 @@ export default {
         files: item.files.concat(),
       })).reverse();
     },
-    ...mapState([
-      'user',
-    ]),
   },
   data() {
     return {

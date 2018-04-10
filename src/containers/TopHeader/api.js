@@ -31,3 +31,19 @@ export function uerLogout() {
       });
   });
 }
+
+export function editNameStuId(params) {
+  return new Promise((resolve, reject) => {
+    axios.put('/api/student/editUserMsg', params)
+      .then((result) => {
+        if (result.stats === 0) {
+          reject(result.data.error);
+        } else {
+          resolve();
+        }
+      })
+      .catch(() => {
+        resolve();
+      });
+  });
+}

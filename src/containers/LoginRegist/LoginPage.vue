@@ -30,14 +30,10 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
 import { loginUser, checkEmailExist } from './api';
 
 export default {
   name: 'LoginPage',
-  computed: mapState([
-    'user',
-  ]),
   data() {
     const checkEmail = (rule, value, callback) => {
       if (!value) {
@@ -82,7 +78,7 @@ export default {
             email: this.ruleForm.email,
             password: this.ruleForm.password,
           }).then(() => {
-            this.refreshHeader();
+            this.$store.dispatch('refreshHeader');
             this.$router.push('/');
           }).catch((error) => {
             this.$message.error(error);
@@ -93,9 +89,6 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    ...mapActions([
-      'refreshHeader',
-    ]),
   },
 };
 </script>

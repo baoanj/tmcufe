@@ -1,6 +1,6 @@
 <template lang="html">
   <el-dialog title="答案" width="80%" :visible="visible" @close="closeDialog">
-    <div v-if="user.role === 'student'">
+    <div v-if="$store.state.user.role === 'student'">
       <div v-if="staticAnswer || staticFileList.length">
         <markdown-editor
           v-if="staticAnswer"
@@ -11,7 +11,7 @@
       </div>
       <p v-else>暂无答案</p>
     </div>
-    <div v-if="user.role === 'teacher'">
+    <div v-if="$store.state.user.role === 'teacher'">
       <div v-if="!editable && (staticAnswer || staticFileList.length)">
         <markdown-editor
           :value="staticAnswer"
@@ -39,7 +39,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import MarkdownEditor from '@/components/MarkdownEditor';
 import UploadFiles from '@/components/UploadFiles';
 import FileList from '@/components/FileList';
@@ -59,9 +58,6 @@ export default {
       default: '',
     },
   },
-  computed: mapState([
-    'user',
-  ]),
   components: {
     MarkdownEditor,
     UploadFiles,

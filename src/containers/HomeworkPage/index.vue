@@ -1,5 +1,5 @@
 <template lang="html">
-  <div v-if="user.name && homework.createDate">
+  <div v-if="$store.state.user.name && homework.createDate">
     <vue-headful
       title="高校教学管理系统 | 作业"
     />
@@ -9,7 +9,7 @@
     <div>
       <p>
         <span>{{ homework.title }}</span>
-        <span v-if="user.role === 'teacher'">
+        <span v-if="$store.state.user.role === 'teacher'">
           <el-button type="text" @click="showEditHomeworkDialog()">编辑作业信息</el-button>
         </span>
       </p>
@@ -25,10 +25,11 @@
       </p>
       <file-list :files="homework.files" />
       <el-button @click="showHwAnswerDialog()">
-        {{ user.role | answerStatus(homework.hwAnswer.answer, homework.hwAnswer.files.length) }}
+        {{ $store.state.user.role |
+          answerStatus(homework.hwAnswer.answer, homework.hwAnswer.files.length) }}
       </el-button>
     </div>
-    <div v-if="user.role === 'teacher'">
+    <div v-if="$store.state.user.role === 'teacher'">
       <p>提交人数: {{ homework.submissions.length }}</p>
       <submissions-table
         :submissions="homework.submissions"
@@ -37,7 +38,7 @@
         @fetchData="fetchData"
       />
     </div>
-    <div v-if="user.role === 'student'">
+    <div v-if="$store.state.user.role === 'student'">
       <div v-if="homework.submissions.length">
         <p>
           <span>已提交</span>
@@ -112,7 +113,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import MarkdownEditor from '@/components/MarkdownEditor';
 import FileList from '@/components/FileList';
 import utils from '@/utils';
@@ -144,9 +144,6 @@ export default {
       }
       return 2;
     },
-    ...mapState([
-      'user',
-    ]),
   },
   data() {
     return {

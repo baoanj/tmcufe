@@ -2,6 +2,7 @@ import Vue from 'vue';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import mavonEditor from 'mavon-editor';
+import draggable from 'vuedraggable';
 import 'mavon-editor/dist/css/index.css';
 import vueHeadful from 'vue-headful';
 import App from './App';
@@ -14,6 +15,7 @@ Vue.use(ElementUI);
 Vue.use(mavonEditor);
 
 Vue.component('vue-headful', vueHeadful);
+Vue.component('vue-draggable', draggable);
 
 /* eslint-disable no-new */
 new Vue({

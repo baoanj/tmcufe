@@ -10,7 +10,7 @@
           }"
         >进入</router-link>
         <el-button
-          v-if="user.role === 'teacher'"
+          v-if="$store.state.user.role === 'teacher'"
           class="card-text-btn"
           type="text"
         >编辑</el-button>
@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import utils from '@/utils';
 
 export default {
@@ -43,9 +42,6 @@ export default {
       default: '',
     },
   },
-  computed: mapState([
-    'user',
-  ]),
   methods: {
     formateDate(timestamp) {
       return utils.formateDate(+timestamp);

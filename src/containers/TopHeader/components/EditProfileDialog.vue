@@ -1,5 +1,5 @@
 <template lang="html">
-  <el-dialog title="修改班级信息" width="80%" :visible="visible" @close="closeDialog">
+  <el-dialog title="修改个人信息" width="50%" :visible="visible" @close="closeDialog">
     <el-form
       :model="ruleForm"
       status-icon
@@ -7,23 +7,11 @@
       ref="ruleForm"
       label-width="100px"
     >
-      <el-form-item label="班级Id">
-        <p>{{ classId }}</p>
-      </el-form-item>
-      <el-form-item label="班级名称" prop="name">
+      <el-form-item label="姓名" prop="name">
         <el-input v-model="ruleForm.name" auto-complete="on"></el-input>
       </el-form-item>
-      <el-form-item label="其他信息" prop="message">
-        <markdown-editor
-          :value="ruleForm.message"
-          @change="(val) => ruleForm.message = val"
-        />
-      </el-form-item>
-      <el-form-item label="任课教师" prop="teacherName">
-        <el-input v-model="ruleForm.teacherName" auto-complete="on"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="ruleForm.password"></el-input>
+      <el-form-item label="学号" prop="stuId">
+        <el-input v-model="ruleForm.stuId" auto-complete="on"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="closeDialog">取消</el-button>
@@ -39,14 +27,10 @@
 </template>
 
 <script>
-import MarkdownEditor from '@/components/MarkdownEditor';
-import { updateClassMsg } from '../api';
+import { editNameStuId } from '../api';
 
 export default {
-  name: 'EditClassDialog',
-  components: {
-    MarkdownEditor,
-  },
+  name: 'EditProfileDialog',
   data() {
     const checkName = (rule, value, callback) => {
       if (value === '') {
@@ -55,55 +39,47 @@ export default {
         callback();
       }
     };
-    const validatePass = (rule, value, callback) => {
+    const validateStuId = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入密码'));
+        callback(new Error('必填'));
       } else {
         callback();
       }
     };
     return {
-      classId: '',
       visible: false,
       loading: false,
       ruleForm: {
         name: '',
-        teacherName: '',
-        password: '',
-        message: '',
+        stuId: '',
       },
       rules: {
         name: [
           { required: true, validator: checkName, trigger: 'blur' },
         ],
-        password: [
-          { required: true, validator: validatePass, trigger: 'blur' },
+        stuId: [
+          { required: true, validator: validateStuId, trigger: 'blur' },
         ],
       },
     };
   },
   methods: {
-    show(classs) {
-      this.classId = classs.classId;
-      this.ruleForm.name = classs.name;
-      this.ruleForm.teacherName = classs.teacherName;
-      this.ruleForm.password = classs.password;
-      this.ruleForm.message = classs.message;
+    show(name, stuId) {
+      this.ruleForm.name = name;
+      this.ruleForm.stuId = stuId;
       this.visible = true;
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.loading = true;
-          updateClassMsg(this.classId, {
+          editNameStuId({
             name: this.ruleForm.name,
-            teacherName: this.ruleForm.teacherName,
-            password: this.ruleForm.password,
-            message: this.ruleForm.message,
+            stuId: this.ruleForm.stuId,
           }).then(() => {
             this.visible = false;
             this.loading = false;
-            this.$emit('fetchData');
+            this.$store.dispatch('refreshHeader');
           }).catch((error) => {
             this.loading = false;
             this.$message.error(error);

@@ -10,6 +10,9 @@
       <el-form-item label="班级Id" prop="classId">
         <el-input v-model="ruleForm.classId" auto-complete="on"></el-input>
       </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="ruleForm.password"></el-input>
+      </el-form-item>
       <el-form-item label="班级名称" prop="name">
         <el-input v-model="ruleForm.name" auto-complete="on"></el-input>
       </el-form-item>
@@ -21,9 +24,6 @@
       </el-form-item>
       <el-form-item label="任课教师" prop="teacherName">
         <el-input v-model="ruleForm.teacherName" auto-complete="on"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="ruleForm.password"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="closeDialog">取消</el-button>

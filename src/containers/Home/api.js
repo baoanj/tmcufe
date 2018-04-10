@@ -5,7 +5,7 @@ export function getClasses() {
     axios.get('/api/general/getClasses')
       .then((result) => {
         if (result.stats === 1) {
-          resolve(result.data.classes);
+          resolve(result.data);
         } else {
           reject(result.data.error);
         }
@@ -19,6 +19,22 @@ export function getClasses() {
 export function addClass(params) {
   return new Promise((resolve, reject) => {
     axios.post('/api/teacher/addClass', params)
+      .then((result) => {
+        if (result.stats === 0) {
+          reject(result.data.error);
+        } else {
+          resolve();
+        }
+      })
+      .catch(() => {
+        reject('网络错误');
+      });
+  });
+}
+
+export function submitMoveClasses(params) {
+  return new Promise((resolve, reject) => {
+    axios.put('/api/general/moveClasses', params)
       .then((result) => {
         if (result.stats === 0) {
           reject(result.data.error);
