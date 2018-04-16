@@ -1,32 +1,39 @@
 <template lang="html">
-  <el-table
-    :data="students"
-    stripe
-    style="width: 100%"
-  >
-    <el-table-column
-      prop="stuId"
-      label="学号"
-    ></el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-    ></el-table-column>
-    <el-table-column
-      label="操作"
+  <div>
+    <el-table
+      :data="students"
+      stripe
+      style="width: 100%"
     >
-      <template slot-scope="scope">
-        <el-button
-          @click="viewStudentHwsSubs(scope.row.userId)"
-          type="text"
-          size="small"
-        >查看</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+      <el-table-column
+        prop="stuId"
+        label="学号"
+      ></el-table-column>
+      <el-table-column
+        prop="name"
+        label="姓名"
+      ></el-table-column>
+      <el-table-column
+        label="操作"
+      >
+        <template slot-scope="scope">
+          <el-button
+            @click="viewStudentHwsSubs(scope.row)"
+            type="text"
+            size="small"
+          >查看作业提交统计</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <view-stu-subs-dialog
+      ref="viewStuSubsDialogRef"
+    />
+  </div>
 </template>
 
 <script>
+import ViewStuSubsDialog from './ViewStuSubsDialog';
+
 export default {
   name: 'StudentsTable',
   props: {
@@ -41,9 +48,12 @@ export default {
       default: '',
     },
   },
+  components: {
+    ViewStuSubsDialog,
+  },
   methods: {
-    viewStudentHwsSubs(userId) {
-      console.log(this.classId, userId); //eslint-disable-line
+    viewStudentHwsSubs(row) {
+      this.$refs.viewStuSubsDialogRef.show(this.classId, row.userId, row.name, row.stuId);
     },
   },
 };

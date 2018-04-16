@@ -3,6 +3,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import mavonEditor from 'mavon-editor';
 import draggable from 'vuedraggable';
+import viserVue from 'viser-vue';
 import 'mavon-editor/dist/css/index.css';
 import vueHeadful from 'vue-headful';
 import App from './App';
@@ -13,6 +14,7 @@ Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
 Vue.use(mavonEditor);
+Vue.use(viserVue);
 
 Vue.component('vue-headful', vueHeadful);
 Vue.component('vue-draggable', draggable);

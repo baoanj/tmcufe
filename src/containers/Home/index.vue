@@ -1,5 +1,8 @@
 <template lang="html">
   <div v-if="$store.state.user.name">
+    <vue-headful
+      title="高校教学管理系统"
+    />
     <div>
       <el-button
         v-if="$store.state.user.role === 'teacher'"

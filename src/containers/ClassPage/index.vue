@@ -27,6 +27,7 @@
       <el-tab-pane label="作业" name="homework">
         <div v-if="$store.state.user.role === 'teacher'">
           <el-button type="primary" @click="addHomework">创建作业</el-button>
+          <el-button type="primary" @click="viewAllSubs">数据统计</el-button>
         </div>
         <p>作业数量: {{ classs.homeworks.length }}</p>
         <div>
@@ -65,6 +66,9 @@
       ref="editClassDialogRef"
       @fetchData="fetchData"
     />
+    <view-all-subs-dialog
+      ref="viewAllSubsDialogRef"
+    />
   </div>
 </template>
 
@@ -76,6 +80,7 @@ import HomeworkItem from './components/HomeworkItem';
 import StudentsTable from './components/StudentsTable';
 import CoursewarePane from './components/CoursewarePane';
 import EditClassDialog from './components/EditClassDialog';
+import ViewAllSubsDialog from './components/ViewAllSubsDialog';
 
 export default {
   name: 'ClassPage',
@@ -89,6 +94,7 @@ export default {
     CoursewarePane,
     MarkdownEditor,
     EditClassDialog,
+    ViewAllSubsDialog,
   },
   data() {
     return {
@@ -124,6 +130,9 @@ export default {
     },
     showEditClassDialog() {
       this.$refs.editClassDialogRef.show(this.classs);
+    },
+    viewAllSubs() {
+      this.$refs.viewAllSubsDialogRef.show(this.classs.homeworks);
     },
   },
 };

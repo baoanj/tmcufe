@@ -26,6 +26,10 @@
       <el-form-item label="确认密码" prop="checkPass">
         <el-input type="password" v-model="ruleForm.checkPass" auto-complete="off"></el-input>
       </el-form-item>
+      <el-form-item class="captcha-form-item" label="验证码" prop="captcha">
+        <el-input class="captcha-input" v-model="ruleForm.captcha"></el-input>
+        <span @click="getCaptchaSVG" v-html="captchaSVG"></span>
+      </el-form-item>
       <el-form-item>
         <el-radio-group v-model="ruleForm.role">
           <el-radio label="student">学生</el-radio>
@@ -45,10 +49,13 @@
 </template>
 
 <script>
-import { registUser, checkEmailExist } from './api';
+import { registUser, checkEmailExist, getCaptcha, checkCaptcha } from './api';
 
 export default {
   name: 'RegistPage',
+  created() {
+    this.getCaptchaSVG();
+  },
   data() {
     const checkEmail = (rule, value, callback) => {
       if (!value) {
@@ -96,6 +103,19 @@ export default {
         callback();
       }
     };
+    const validateCaptcha = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入验证码'));
+      } else if (!/^[a-zA-Z0-9]{4}$/.test(value)) {
+        callback(new Error('验证码格式错误'));
+      } else {
+        checkCaptcha(value).then(() => {
+          callback();
+        }).catch((error) => {
+          callback(new Error(error));
+        });
+      }
+    };
     return {
       ruleForm: {
         email: '',
@@ -103,6 +123,7 @@ export default {
         stuId: '',
         password: '',
         checkPass: '',
+        captcha: '',
         role: 'student',
       },
       rules: {
@@ -121,7 +142,11 @@ export default {
         checkPass: [
           { validator: validatePass2, trigger: 'blur' },
         ],
+        captcha: [
+          { validator: validateCaptcha, trigger: 'blur' },
+        ],
       },
+      captchaSVG: '',
     };
   },
   methods: {
@@ -134,6 +159,7 @@ export default {
             email: this.ruleForm.email,
             password: this.ruleForm.password,
             role: this.ruleForm.role,
+            captcha: this.ruleForm.captcha,
           }).then(() => {
             this.$message.success('注册成功，请登录');
             this.$router.push('/login');
@@ -141,6 +167,14 @@ export default {
             this.$message.error(error);
           });
         }
+      });
+    },
+    getCaptchaSVG() {
+      getCaptcha().then((svg) => {
+        this.captchaSVG = svg;
+      }).catch((error) => {
+        this.captchaSVG = '获取验证码失败';
+        this.$message.error(error);
       });
     },
     resetForm(formName) {
@@ -168,5 +202,16 @@ export default {
 
 .submit-btn {
   float: right;
+}
+
+.captcha-input {
+  width: 50%;
+  vertical-align: top;
+}
+</style>
+
+<style lang="css">
+.captcha-form-item > .el-form-item__content {
+  line-height: normal;
 }
 </style>

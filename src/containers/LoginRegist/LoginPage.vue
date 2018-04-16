@@ -17,6 +17,10 @@
       <el-form-item label="密码" prop="password">
         <el-input type="password" v-model="ruleForm.password"></el-input>
       </el-form-item>
+      <el-form-item class="captcha-form-item" label="验证码" prop="captcha">
+        <el-input class="captcha-input" v-model="ruleForm.captcha"></el-input>
+        <span @click="getCaptchaSVG" v-html="captchaSVG"></span>
+      </el-form-item>
       <el-form-item>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
         <el-button
@@ -30,10 +34,13 @@
 </template>
 
 <script>
-import { loginUser, checkEmailExist } from './api';
+import { loginUser, checkEmailExist, getCaptcha, checkCaptcha } from './api';
 
 export default {
   name: 'LoginPage',
+  created() {
+    this.getCaptchaSVG();
+  },
   data() {
     const checkEmail = (rule, value, callback) => {
       if (!value) {
@@ -55,10 +62,24 @@ export default {
         callback();
       }
     };
+    const validateCaptcha = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入验证码'));
+      } else if (!/^[a-zA-Z0-9]{4}$/.test(value)) {
+        callback(new Error('验证码格式错误'));
+      } else {
+        checkCaptcha(value).then(() => {
+          callback();
+        }).catch((error) => {
+          callback(new Error(error));
+        });
+      }
+    };
     return {
       ruleForm: {
         email: '',
         password: '',
+        captcha: '',
       },
       rules: {
         email: [
@@ -67,7 +88,11 @@ export default {
         password: [
           { validator: validatePass, trigger: 'blur' },
         ],
+        captcha: [
+          { validator: validateCaptcha, trigger: 'blur' },
+        ],
       },
+      captchaSVG: '',
     };
   },
   methods: {
@@ -77,6 +102,7 @@ export default {
           loginUser({
             email: this.ruleForm.email,
             password: this.ruleForm.password,
+            captcha: this.ruleForm.captcha,
           }).then(() => {
             this.$store.dispatch('refreshHeader');
             this.$router.push('/');
@@ -88,6 +114,14 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    getCaptchaSVG() {
+      getCaptcha().then((svg) => {
+        this.captchaSVG = svg;
+      }).catch((error) => {
+        this.captchaSVG = '获取验证码失败';
+        this.$message.error(error);
+      });
     },
   },
 };
@@ -111,5 +145,16 @@ export default {
 
 .submit-btn {
   float: right;
+}
+
+.captcha-input {
+  width: 50%;
+  vertical-align: top;
+}
+</style>
+
+<style lang="css">
+.captcha-form-item > .el-form-item__content {
+  line-height: normal;
 }
 </style>

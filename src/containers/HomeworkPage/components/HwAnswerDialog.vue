@@ -29,7 +29,10 @@
           @change="(val) => answer = val"
         />
         <upload-files :files="fileList" @change="val => fileList = val" />
-          <el-button @click="cancelEdit">取消编辑</el-button>
+        <el-button
+          v-if="staticAnswer || staticFileList.length"
+          @click="cancelEdit"
+        >取消编辑</el-button>
         <el-button @click="submitHwAnswer" :loading="loading">
           {{ loading ? '提交中...' : '提交' }}
         </el-button>

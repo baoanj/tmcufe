@@ -9,11 +9,6 @@
             params: { classId, createDate: homework.createDate }
           }"
         >进入</router-link>
-        <el-button
-          v-if="$store.state.user.role === 'teacher'"
-          class="card-text-btn"
-          type="text"
-        >编辑</el-button>
       </div>
       <div>
         <p>创建时间: {{ formateDate(homework.createDate) }}</p>
