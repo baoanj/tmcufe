@@ -1,5 +1,11 @@
 <template lang="html">
-  <el-dialog title="修改个人信息" width="50%" :visible="visible" @close="closeDialog">
+  <el-dialog
+    title="修改个人信息"
+    width="50%"
+    :modal="false"
+    :visible="visible"
+    @close="closeDialog"
+   >
     <el-form
       :model="ruleForm"
       status-icon

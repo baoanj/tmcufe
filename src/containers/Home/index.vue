@@ -3,33 +3,35 @@
     <vue-headful
       title="高校教学管理系统"
     />
-    <div>
-      <el-button
-        v-if="$store.state.user.role === 'teacher'"
-        type="primary"
-        @click="addClass"
-      >新建班级</el-button>
-      <el-button
-        v-if="$store.state.user.role === 'student'"
-        type="primary"
-        @click="enterClass"
-      >添加班级</el-button>
-      <el-button
-        v-if="!moving"
-        type="primary"
-        @click="moving = true"
-      >移动班级</el-button>
-      <el-button
-        v-if="moving"
-        type="primary"
-        @click="cancelMove"
-      >放弃移动</el-button>
-      <el-button
-        v-if="moving"
-        type="primary"
-        @click="submitMove"
-      >提交移动</el-button>
-      <span v-if="moving">拖动下方卡片即可移动</span>
+    <div class="home-operate-container">
+      <div class="home-operate-content">
+        <el-button
+          v-if="$store.state.user.role === 'teacher'"
+          type="primary"
+          @click="addClass"
+        >新建班级</el-button>
+        <el-button
+          v-if="$store.state.user.role === 'student'"
+          type="primary"
+          @click="enterClass"
+        >添加班级</el-button>
+        <el-button
+          v-if="!moving"
+          type="primary"
+          @click="moving = true"
+        >移动班级</el-button>
+        <el-button
+          v-if="moving"
+          type="primary"
+          @click="cancelMove"
+        >放弃移动</el-button>
+        <el-button
+          v-if="moving"
+          type="primary"
+          @click="submitMove"
+        >提交移动</el-button>
+        <span v-if="moving" class="move-note">拖动下方卡片即可移动</span>
+      </div>
     </div>
     <div v-if="moving">
       <vue-draggable :options="draggableOptions" v-model="sortableMoveClasses">
@@ -174,5 +176,24 @@ export default {
 <style lang="css" scoped>
 .ghost-move {
   opacity: 0.5;
+}
+
+.home-operate-container {
+  padding: 10px;
+}
+
+.home-operate-content {
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.move-note {
+  padding-left: 10px;
+  font-size: 14px;
+  color: #606266;
 }
 </style>

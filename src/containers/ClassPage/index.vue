@@ -4,32 +4,41 @@
       title="高校教学管理系统 | 班级"
     />
     <div>
-      <router-link to="/">回主页</router-link>
-    </div>
-    <div>
-      <p>
-        <span>{{ classs.name }}</span>
-        <span v-if="$store.state.user.role === 'teacher'">
-          <el-button type="text" @click="showEditClassDialog()">编辑班级信息</el-button>
-        </span>
-      </p>
-      <p>
-        <span>班级Id: {{ classs.classId }}</span>
-        <span>密码: {{ classs.password }}</span>
-        <span>任课教师: {{ classs.teacherName }}</span>
-      </p>
+      <div class="custom-card">
+        <div>
+          <router-link class="card-text-btn" to="/">
+            <i class="el-icon-arrow-left"></i>
+            <span>回主页</span>
+          </router-link>
+          <span class="class-name">{{ classs.name }}</span>
+          <span v-if="$store.state.user.role === 'teacher'">
+            <el-button class="el-text-btn" type="text" @click="showEditClassDialog()">
+              <span>编辑班级信息</span>
+              <i class="el-icon-edit"></i>
+            </el-button>
+          </span>
+        </div>
+        <p>
+          <span class="class-info tmcu-text">班级Id：{{ classs.classId }}</span>
+          <span class="class-info tmcu-text">密码：{{ classs.password }}</span>
+          <span class="class-info tmcu-text">任课教师：{{ classs.teacherName }}</span>
+        </p>
+      </div>
       <markdown-editor
+        v-if="classs.message"
         :value="classs.message"
         :edit="false"
       />
     </div>
     <el-tabs v-model="activeTabName">
       <el-tab-pane label="作业" name="homework">
-        <div v-if="$store.state.user.role === 'teacher'">
-          <el-button type="primary" @click="addHomework">创建作业</el-button>
-          <el-button type="primary" @click="viewAllSubs">数据统计</el-button>
+        <div class="hw-container">
+          <div class="hw-content" v-if="$store.state.user.role === 'teacher'">
+            <span class="hw-total">作业数量: {{ classs.homeworks.length }}</span>
+            <el-button type="primary" @click="addHomework">创建作业</el-button>
+            <el-button type="primary" @click="viewAllSubs">数据统计</el-button>
+          </div>
         </div>
-        <p>作业数量: {{ classs.homeworks.length }}</p>
         <div>
           <homework-item
             v-for="homework in reverseHomeworks"
@@ -139,4 +148,60 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.custom-card {
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  overflow: hidden;
+  padding: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.card-text-btn {
+  float: left;
+  font-size: 14px;
+  text-decoration: none;
+  color: #409eff;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.card-text-btn:hover {
+  color: #66b1ff;
+}
+
+.class-name {
+  color: #606266;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.el-text-btn {
+  padding: 0;
+}
+
+.class-info {
+  padding-left: 10px;
+}
+
+.hw-container {
+  padding: 10px;
+}
+
+.hw-content {
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.hw-total {
+  color: #606266;
+  font-size: 14px;
+  margin-right: 20px;
+}
 </style>

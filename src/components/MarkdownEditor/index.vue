@@ -1,18 +1,20 @@
 <template lang="html">
-  <div v-if="edit">
-    <mavon-editor
-      :toolbars="toolbars"
-      :value="value"
-      @change="val => $emit('change', val)"
-    />
-  </div>
-  <div v-else>
-    <mavon-editor
-      :toolbarsFlag="false"
-      :subfield="false"
-      defaultOpen="preview"
-      :value="value"
-    />
+  <div>
+    <div class="edit" v-if="edit">
+      <mavon-editor
+        :toolbars="toolbars"
+        :value="value"
+        @change="val => $emit('change', val)"
+      />
+    </div>
+    <div class="not-edit" v-else>
+      <mavon-editor
+        :toolbarsFlag="false"
+        :subfield="false"
+        defaultOpen="preview"
+        :value="value"
+      />
+    </div>
   </div>
 </template>
 
@@ -75,6 +77,15 @@ export default {
 
 <style lang="css" scoped>
 .v-note-wrapper {
-  max-height: 600px;
+  max-height: 800px;
+  z-index: 1;
+}
+
+.edit .v-note-wrapper {
+  min-height: 500px;
+}
+
+.not-edit .v-note-wrapper {
+  min-height: auto;
 }
 </style>

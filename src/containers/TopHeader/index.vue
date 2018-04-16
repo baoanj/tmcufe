@@ -11,7 +11,6 @@
             {{ $store.state.user.role | roleFilter($store.state.user.stuId) }}
           </span>
           <el-dropdown
-            v-if="$store.state.user.role === 'student'"
             placement="bottom"
             @command="handleCommand"
           >
@@ -19,10 +18,13 @@
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="editProfile">修改姓名学号</el-dropdown-item>
+              <el-dropdown-item
+                v-if="$store.state.user.role === 'student'"
+                command="editProfile"
+              >修改姓名学号</el-dropdown-item>
+              <el-dropdown-item command="logout">退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <el-button class="logout-btn" size="mini" @click="logout">退出</el-button>
         </div>
         <div v-else class="profile">
           <el-button type="primary" @click="login">登录</el-button>
@@ -67,6 +69,8 @@ export default {
       if (command === 'editProfile') {
         this.$refs.editProfileDialogRef.show(this.$store.state.user.name,
           this.$store.state.user.stuId);
+      } else if (command === 'logout') {
+        this.logout();
       }
     },
   },

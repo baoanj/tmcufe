@@ -3,34 +3,40 @@
     <vue-headful
       title="高校教学管理系统 | 作业"
     />
-    <div>
-      <router-link :to="`/class/${$route.params.classId}`">回班级主页</router-link>
-    </div>
-    <div>
-      <p>
-        <span>{{ homework.title }}</span>
-        <span v-if="$store.state.user.role === 'teacher'">
-          <el-button type="text" @click="showEditHomeworkDialog()">编辑作业信息</el-button>
-        </span>
-      </p>
+    <div class="hw-box">
+      <div class="custom-card">
+        <p>
+          <router-link class="card-text-btn" :to="`/class/${$route.params.classId}`">
+            <i class="el-icon-arrow-left"></i>
+            <span>回班级主页</span>
+          </router-link>
+          <span class="hw-title">{{ homework.title }}</span>
+          <span :class="`hw-stauts-${expired}`">{{ expired | hwStatus }}</span>
+          <span v-if="$store.state.user.role === 'teacher'">
+            <el-button type="text" @click="showEditHomeworkDialog()">
+              <span>编辑作业信息</span>
+              <i class="el-icon-edit"></i>
+            </el-button>
+          </span>
+          <span class="hw-answer tmcu-btn" @click="showHwAnswerDialog()">
+            {{ $store.state.user.role |
+              answerStatus(homework.hwAnswer.answer, homework.hwAnswer.files.length) }}
+          </span>
+        </p>
+        <p>
+          <span class="hw-info tmcu-text">创建时间: {{ formateDate(homework.createDate) }}</span>
+          <span class="hw-info tmcu-text">开始时间: {{ formateDate(homework.beginDate) }}</span>
+          <span class="hw-info tmcu-text">截止时间: {{ formateDate(homework.endDate) }}</span>
+        </p>
+      </div>
       <markdown-editor
         :value="homework.description"
         :edit="false"
       />
-      <p>
-        <span>创建时间: {{ formateDate(homework.createDate) }}</span>
-        <span>开始时间: {{ formateDate(homework.beginDate) }}</span>
-        <span>截止时间: {{ formateDate(homework.endDate) }}</span>
-        <span>状态: {{ expired | hwStatus }}</span>
-      </p>
       <file-list :files="homework.files" />
-      <el-button @click="showHwAnswerDialog()">
-        {{ $store.state.user.role |
-          answerStatus(homework.hwAnswer.answer, homework.hwAnswer.files.length) }}
-      </el-button>
     </div>
     <div v-if="$store.state.user.role === 'teacher'">
-      <p>提交人数: {{ homework.submissions.length }}</p>
+      <p class="tmcu-text">共 {{ homework.submissions.length }} 人提交</p>
       <submissions-table
         :submissions="homework.submissions"
         :classId="$route.params.classId"
@@ -40,7 +46,7 @@
     </div>
     <div v-if="$store.state.user.role === 'student'">
       <div v-if="homework.submissions.length">
-        <p>
+        <p class="tmcu-text">
           <span>已提交</span>
           <span v-if="!homework.submissions[0].checked && expired === 2">
             <el-button type="text" @click="editingSub = homework.submissions[0]">编辑</el-button>
@@ -49,12 +55,12 @@
             <el-button type="text" :loading="loading" @click="deleteHwSub">撤销</el-button>
           </span>
         </p>
-        <p>
+        <p class="tmcu-text">
           <span>姓名: {{ homework.submissions[0].stuName }}</span>
           <span>学号: {{ homework.submissions[0].stuId }}</span>
           <span>提交时间: {{ formateDate(homework.submissions[0].date) }}</span>
         </p>
-        <div>
+        <div class="tmcu-text">
           <p v-if="homework.submissions[0].checked">
             <span>老师已审阅</span>
             <span>反馈结果: {{ homework.submissions[0].feedback || '无' }}</span>
@@ -63,7 +69,7 @@
         </div>
         <div v-if="editingSub">
           <p>
-            <span>修改已提交作业</span>
+            <span class="tmcu-text">修改已提交作业</span>
             <el-button type="text" @click="editingSub = null">放弃修改</el-button>
           </p>
           <submit-homework
@@ -76,7 +82,7 @@
           />
         </div>
         <div v-else>
-          <p>提交详情</p>
+          <p class="tmcu-text">提交详情:</p>
           <markdown-editor
             :value="homework.submissions[0].answer"
             :edit="false"
@@ -85,7 +91,7 @@
         </div>
       </div>
       <div v-else>
-        <p>未提交</p>
+        <p class="tmcu-text">未提交</p>
         <submit-homework
           v-if="expired === 2"
           :classId="$route.params.classId"
@@ -218,5 +224,70 @@ export default {
 };
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
+.custom-card {
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  overflow: hidden;
+  padding: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.card-text-btn {
+  float: left;
+  font-size: 14px;
+  text-decoration: none;
+  color: #409eff;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.card-text-btn:hover {
+  color: #66b1ff;
+}
+
+.hw-box {
+  margin-bottom: 20px;
+}
+
+.hw-title {
+  color: #606266;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.hw-info {
+  padding-left: 10px;
+}
+
+.hw-stauts-0 {
+  border: 1px solid #E6A23C;
+  border-radius: 3px;
+  font-size: 14px;
+  color: #E6A23C;
+  padding: 2px 3px;
+}
+
+.hw-stauts-1 {
+  border: 1px solid #909399;
+  border-radius: 3px;
+  font-size: 14px;
+  color: #909399;
+  padding: 2px 3px;
+}
+
+.hw-stauts-2 {
+  border: 1px solid #67C23A;
+  border-radius: 3px;
+  font-size: 14px;
+  color: #67C23A;
+  padding: 2px 3px;
+}
+
+.hw-answer {
+  float: right;
+}
 </style>

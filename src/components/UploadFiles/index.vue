@@ -10,11 +10,18 @@
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
       <div class="el-upload__tip">最多可上传10个文件，每个不能超过10M</div>
     </el-upload>
-    <ul>
+    <ul class="file-list">
       <li
+        class="tmcu-text"
         :key="file.name"
         v-for="file in files"
-      >{{ file.name }}<span @click="removeFile(file.name)"> x</span></li>
+      >
+        <i class="el-icon-document"></i>
+        <span>{{ file.name }}</span>
+        <span class="tmcu-btn" @click="removeFile(file.name)">
+          <i class="el-icon-close"></i>
+        </span>
+      </li>
     </ul>
   </div>
 </template>
@@ -68,5 +75,8 @@ export default {
 };
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
+.file-list {
+  list-style: none;
+}
 </style>

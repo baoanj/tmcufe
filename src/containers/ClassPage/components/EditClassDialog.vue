@@ -1,5 +1,11 @@
 <template lang="html">
-  <el-dialog title="修改班级信息" width="80%" :visible="visible" @close="closeDialog">
+  <el-dialog
+    title="修改班级信息"
+    :visible="visible"
+    :fullscreen="true"
+    :center="true"
+    @close="closeDialog"
+  >
     <el-form
       :model="ruleForm"
       status-icon
@@ -13,6 +19,9 @@
       <el-form-item label="班级名称" prop="name">
         <el-input v-model="ruleForm.name" auto-complete="on"></el-input>
       </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="ruleForm.password"></el-input>
+      </el-form-item>
       <el-form-item label="其他信息" prop="message">
         <markdown-editor
           :value="ruleForm.message"
@@ -21,9 +30,6 @@
       </el-form-item>
       <el-form-item label="任课教师" prop="teacherName">
         <el-input v-model="ruleForm.teacherName" auto-complete="on"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="ruleForm.password"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="closeDialog">取消</el-button>

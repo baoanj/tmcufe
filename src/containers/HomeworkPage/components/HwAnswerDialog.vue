@@ -1,5 +1,11 @@
 <template lang="html">
-  <el-dialog title="答案" width="80%" :visible="visible" @close="closeDialog">
+  <el-dialog
+    title="答案"
+    :fullscreen="true"
+    :center="true"
+    :visible="visible"
+    @close="closeDialog"
+  >
     <div v-if="$store.state.user.role === 'student'">
       <div v-if="staticAnswer || staticFileList.length">
         <markdown-editor
@@ -13,29 +19,35 @@
     </div>
     <div v-if="$store.state.user.role === 'teacher'">
       <div v-if="!editable && (staticAnswer || staticFileList.length)">
+        <div class="answer-op">
+          <el-button @click="editable = true">编辑</el-button>
+          <el-button @click="deleteAnswer" :loading="loading">
+            {{ loading ? '删除中...' : '删除'}}
+          </el-button>
+        </div>
         <markdown-editor
           :value="staticAnswer"
           :edit="false"
         />
         <file-list :files="staticFileList" />
-        <el-button @click="editable = true">编辑</el-button>
-        <el-button @click="deleteAnswer" :loading="loading">
-          {{ loading ? '删除中...' : '删除'}}
-        </el-button>
       </div>
       <div v-else>
+        <div class="answer-op">
+          <el-button
+            v-if="staticAnswer || staticFileList.length"
+            @click="cancelEdit"
+          >取消编辑</el-button>
+          <el-button @click="submitHwAnswer" :loading="loading">
+            {{ loading ? '提交中...' : '提交' }}
+          </el-button>
+        </div>
         <markdown-editor
           :value="answer"
           @change="(val) => answer = val"
         />
-        <upload-files :files="fileList" @change="val => fileList = val" />
-        <el-button
-          v-if="staticAnswer || staticFileList.length"
-          @click="cancelEdit"
-        >取消编辑</el-button>
-        <el-button @click="submitHwAnswer" :loading="loading">
-          {{ loading ? '提交中...' : '提交' }}
-        </el-button>
+        <div class="answer-upload">
+          <upload-files :files="fileList" @change="val => fileList = val" />
+        </div>
       </div>
     </div>
   </el-dialog>
@@ -142,5 +154,13 @@ export default {
 <style lang="css" scoped>
 .submit-btn {
   float: right;
+}
+
+.answer-op {
+  margin-bottom: 20px;
+}
+
+.answer-upload {
+  margin-top: 20px;
 }
 </style>

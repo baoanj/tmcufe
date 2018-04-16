@@ -1,5 +1,11 @@
 <template lang="html">
-  <el-dialog title="新建班级" width="80%" :visible="dialogVisible" @close="closeDialog">
+  <el-dialog
+    title="新建班级"
+    :fullscreen="true"
+    :center="true"
+    :visible="dialogVisible"
+    @close="closeDialog"
+  >
     <el-form
       :model="ruleForm"
       status-icon
@@ -16,7 +22,7 @@
       <el-form-item label="班级名称" prop="name">
         <el-input v-model="ruleForm.name" auto-complete="on"></el-input>
       </el-form-item>
-      <el-form-item label="其他信息(选填)" prop="message">
+      <el-form-item label="其他信息" prop="message">
         <markdown-editor
           :value="ruleForm.message"
           @change="(val) => ruleForm.message = val"
@@ -88,13 +94,13 @@ export default {
       },
       rules: {
         classId: [
-          { validator: checkClassId, trigger: 'blur' },
+          { required: true, validator: checkClassId, trigger: 'blur' },
         ],
         name: [
-          { validator: checkName, trigger: 'blur' },
+          { required: true, validator: checkName, trigger: 'blur' },
         ],
         password: [
-          { validator: validatePass, trigger: 'blur' },
+          { required: true, validator: validatePass, trigger: 'blur' },
         ],
       },
     };

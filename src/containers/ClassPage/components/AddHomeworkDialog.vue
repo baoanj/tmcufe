@@ -1,5 +1,11 @@
 <template lang="html">
-  <el-dialog title="创建作业" width="80%" :visible="dialogVisible" @close="closeDialog">
+  <el-dialog
+    title="创建作业"
+    :fullscreen="true"
+    :center="true"
+    :visible="dialogVisible"
+    @close="closeDialog"
+  >
     <el-form
       :model="ruleForm"
       status-icon
@@ -31,7 +37,9 @@
           :picker-options="pickerOptions"
         ></el-date-picker>
       </el-form-item>
-      <upload-files :files="fileList" @change="val => fileList = val" />
+      <div class="form-item-upload">
+        <upload-files :files="fileList" @change="val => fileList = val" />
+      </div>
       <el-form-item>
         <el-button @click="closeDialog">取消</el-button>
         <el-button
@@ -91,10 +99,7 @@ export default {
       },
       rules: {
         title: [
-          { validator: checkTitle, trigger: 'blur' },
-        ],
-        description: [
-          { validator: checkTitle, trigger: 'blur' },
+          { required: true, validator: checkTitle, trigger: 'blur' },
         ],
         beginDate: [
           { validator: checkDate, trigger: 'blur' },
@@ -172,5 +177,10 @@ export default {
 <style lang="css" scoped>
 .submit-btn {
   float: right;
+}
+
+.form-item-upload {
+  margin-left: 100px;
+  margin-bottom: 20px;
 }
 </style>

@@ -1,11 +1,12 @@
 <template lang="html">
-  <el-dialog title="学生提交详情" width="80%" :visible="visible" @close="closeDialog">
-    <p>
-      <span>学生: {{ submission.stuName}}({{ submission.stuId }})</span>
-      <span>提交时间: {{ formateDate(submission.date) }}</span>
-    </p>
+  <el-dialog
+    :title="`${submission.stuName}(${submission.stuId})提交详情`"
+    width="80%"
+    :visible="visible"
+    @close="closeDialog"
+  >
+    <p>提交时间: {{ formateDate(submission.date) }}</p>
     <div>
-      <p>提交内容:</p>
       <markdown-editor
         :value="submission.answer"
         :edit="false"

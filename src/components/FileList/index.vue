@@ -1,11 +1,15 @@
 <template lang="html">
   <div>
-    <p v-if="files.length">附件：</p>
-    <ul>
+    <p class="note tmcu-text" v-if="files.length">附件：</p>
+    <ul class="file-list">
       <li :key="file.filename" v-for="file in files">
         <a
+          class="tmcu-btn"
           :href="`/api/general/download/${file.filename}/${file.name}`"
-        >{{ file.name }}</a>
+        >
+          <i class="el-icon-document"></i>
+          <span>{{ file.name }}</span>
+        </a>
       </li>
     </ul>
   </div>
@@ -26,5 +30,16 @@ export default {
 };
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
+.note {
+  font-weight: bold;
+}
+
+.file-list {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
 </style>

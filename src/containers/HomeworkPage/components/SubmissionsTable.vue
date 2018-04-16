@@ -21,8 +21,13 @@
       <el-table-column
         prop="checked"
         label="状态"
-        :formatter="formatterStatus"
-      ></el-table-column>
+      >
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.checked ? 'info' : 'success'" size="small">
+            {{ formatterStatus(scope.row.checked) }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="feedback"
         label="反馈"
@@ -81,8 +86,8 @@ export default {
     formatterDate(row, column, cellValue) {
       return this.formateDate(cellValue);
     },
-    formatterStatus(row, column, cellValue) {
-      return cellValue ? '已审阅' : '未审阅';
+    formatterStatus(checked) {
+      return checked ? '已审阅' : '未审阅';
     },
     formatterFeedback(row, column, cellValue) {
       return (row.checked && cellValue) || (row.checked && '无') || '--';

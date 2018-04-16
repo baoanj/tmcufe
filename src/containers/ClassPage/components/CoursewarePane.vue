@@ -1,31 +1,37 @@
 <template lang="html">
-  <div>
+  <div class="courseware">
     <el-row>
       <el-col :span="12">
         <div>
-          <p>所有课件</p>
-          <div :key="courseware.uploadDate" v-for="courseware in reverseCoursewares">
+          <div
+            class="courseware-item"
+            :key="courseware.uploadDate"
+            v-for="courseware in reverseCoursewares"
+          >
             <div>
-              <span>{{ courseware.title }} {{ formateDate(courseware.uploadDate) }}</span>
+              <span class="courseware-title">{{ courseware.title }}</span>
               <span v-if="$store.state.user.role === 'teacher'">
-                <el-button type="text" @click="editCourseware(courseware)">编辑</el-button>
-                <el-button type="text" @click="deleteCourseware(courseware)">删除</el-button>
+                <span class="tmcu-btn" @click="editCourseware(courseware)">编辑</span>
+                <span class="tmcu-btn" @click="deleteCourseware(courseware)">删除</span>
               </span>
             </div>
+            <p class="tmcu-text">{{ formateDate(courseware.uploadDate) }}</p>
             <file-list :files="courseware.files" />
           </div>
         </div>
       </el-col>
       <el-col :span="12">
-        <div v-if="$store.state.user.role === 'teacher'">
-          <p>{{ editingCourseware ? `编辑课件-${editingCourseware.title}` : '新增课件'}}</p>
-          <el-input placeholder="标题(可选)" v-model="title"></el-input>
+        <div class="edit-courseware" v-if="$store.state.user.role === 'teacher'">
+          <p class="courseware-title">
+            {{ editingCourseware ? `编辑课件-${editingCourseware.title}` : '新增课件'}}
+          </p>
+          <el-input class="edit-title" placeholder="标题(可选)" v-model="title"></el-input>
           <upload-files :files="fileList" @change="val => fileList = val" />
-          <div v-if="editingCourseware">
+          <div class="edit-courseware-btn" v-if="editingCourseware">
             <el-button :loading="loading" @click="updateCourseware">提交修改</el-button>
             <el-button @click="quitEditCourseware">放弃修改，新增课件</el-button>
           </div>
-          <div v-else>
+          <div class="edit-courseware-btn" v-else>
             <el-button :loading="loading" @click="submitCourseware">提交</el-button>
           </div>
         </div>
@@ -152,5 +158,32 @@ export default {
 };
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
+.courseware {
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.courseware-item {
+  margin-bottom: 20px;
+}
+
+.courseware-title {
+  font-weight: bold;
+}
+
+.edit-courseware {
+  padding-left: 10px;
+}
+
+.edit-title {
+  margin: 10px 0;
+}
+
+.edit-courseware-btn {
+  margin-top: 20px;
+}
 </style>
