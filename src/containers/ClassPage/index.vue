@@ -33,10 +33,14 @@
     <el-tabs v-model="activeTabName">
       <el-tab-pane label="作业" name="homework">
         <div class="hw-container">
-          <div class="hw-content" v-if="$store.state.user.role === 'teacher'">
+          <div v-if="$store.state.user.role === 'teacher'" class="hw-content">
             <span class="hw-total">作业数量: {{ classs.homeworks.length }}</span>
             <el-button type="primary" @click="addHomework">创建作业</el-button>
             <el-button type="primary" @click="viewAllSubs">数据统计</el-button>
+          </div>
+          <div v-else class="hw-content">
+            <span class="hw-total">作业数量: {{ classs.homeworks.length }}</span>
+            <el-button type="primary" @click="viewStudentHwsSubs">数据统计</el-button>
           </div>
         </div>
         <div>
@@ -78,6 +82,9 @@
     <view-all-subs-dialog
       ref="viewAllSubsDialogRef"
     />
+    <view-stu-subs-dialog
+      ref="viewStuSubsDialogRef"
+    />
   </div>
 </template>
 
@@ -90,6 +97,7 @@ import StudentsTable from './components/StudentsTable';
 import CoursewarePane from './components/CoursewarePane';
 import EditClassDialog from './components/EditClassDialog';
 import ViewAllSubsDialog from './components/ViewAllSubsDialog';
+import ViewStuSubsDialog from './components/ViewStuSubsDialog';
 
 export default {
   name: 'ClassPage',
@@ -104,6 +112,7 @@ export default {
     MarkdownEditor,
     EditClassDialog,
     ViewAllSubsDialog,
+    ViewStuSubsDialog,
   },
   data() {
     return {
@@ -142,6 +151,14 @@ export default {
     },
     viewAllSubs() {
       this.$refs.viewAllSubsDialogRef.show(this.classs.homeworks);
+    },
+    viewStudentHwsSubs() {
+      this.$refs.viewStuSubsDialogRef.show(
+        this.classs.classId,
+        this.classs.students[0].userId,
+        this.classs.students[0].name,
+        this.classs.students[0].stuId,
+      );
     },
   },
 };

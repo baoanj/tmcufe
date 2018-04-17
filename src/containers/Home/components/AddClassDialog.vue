@@ -1,8 +1,6 @@
 <template lang="html">
-  <el-dialog
+  <fullscreen-dialog
     title="新建班级"
-    :fullscreen="true"
-    :center="true"
     :visible="dialogVisible"
     @close="closeDialog"
   >
@@ -40,11 +38,12 @@
         >提交</el-button>
       </el-form-item>
     </el-form>
-  </el-dialog>
+  </fullscreen-dialog>
 </template>
 
 <script>
 import MarkdownEditor from '@/components/MarkdownEditor';
+import FullscreenDialog from '@/components/FullscreenDialog';
 import { addClass, checkClassIdUnique } from '../api';
 
 export default {
@@ -57,6 +56,7 @@ export default {
   },
   components: {
     MarkdownEditor,
+    FullscreenDialog,
   },
   data() {
     const checkClassId = (rule, value, callback) => {

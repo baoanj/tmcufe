@@ -79,3 +79,51 @@ export function checkCaptcha(captcha) {
       });
   });
 }
+
+export function forgotPass(params) {
+  return new Promise((resolve, reject) => {
+    axios.post('/api/general/forgotPass', params)
+      .then((result) => {
+        if (result.stats === 0) {
+          reject(result.data.error);
+        } else {
+          resolve();
+        }
+      })
+      .catch(() => {
+        reject('网络错误');
+      });
+  });
+}
+
+export function checkResetValid(resetId) {
+  return new Promise((resolve, reject) => {
+    axios.post(`/api/general/checkReset/${resetId}`)
+      .then((result) => {
+        if (result.stats === 0) {
+          reject(result.data.error);
+        } else {
+          resolve();
+        }
+      })
+      .catch(() => {
+        reject('网络错误');
+      });
+  });
+}
+
+export function resetPass(resetId, params) {
+  return new Promise((resolve, reject) => {
+    axios.post(`/api/general/resetPass/${resetId}`, params)
+      .then((result) => {
+        if (result.stats === 0) {
+          reject(result.data.error);
+        } else {
+          resolve();
+        }
+      })
+      .catch(() => {
+        reject('网络错误');
+      });
+  });
+}

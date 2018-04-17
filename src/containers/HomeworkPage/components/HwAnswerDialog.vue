@@ -1,8 +1,6 @@
 <template lang="html">
-  <el-dialog
+  <fullscreen-dialog
     title="答案"
-    :fullscreen="true"
-    :center="true"
     :visible="visible"
     @close="closeDialog"
   >
@@ -50,13 +48,14 @@
         </div>
       </div>
     </div>
-  </el-dialog>
+  </fullscreen-dialog>
 </template>
 
 <script>
 import MarkdownEditor from '@/components/MarkdownEditor';
 import UploadFiles from '@/components/UploadFiles';
 import FileList from '@/components/FileList';
+import FullscreenDialog from '@/components/FullscreenDialog';
 import SimpleFormData from '@/utils/simpleFormData';
 import utils from '@/utils';
 import { uploadHwAnswer, deleteHwAnswer } from '../api';
@@ -77,6 +76,7 @@ export default {
     MarkdownEditor,
     UploadFiles,
     FileList,
+    FullscreenDialog,
   },
   data() {
     return {

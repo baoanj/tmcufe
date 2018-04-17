@@ -1,46 +1,47 @@
 <template lang="html">
   <div class="login-box">
     <vue-headful
-      title="高校教学管理系统 | 登录"
+      title="高校教学管理系统 | 忘记密码"
     />
-    <p class="login-title">用户登录</p>
-    <el-form
-      :model="ruleForm"
-      status-icon
-      :rules="rules"
-      ref="ruleForm"
-      label-width="100px"
-    >
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="ruleForm.email" auto-complete="on"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="ruleForm.password"></el-input>
-      </el-form-item>
-      <el-form-item class="captcha-form-item" label="验证码" prop="captcha">
-        <el-input class="captcha-input" v-model="ruleForm.captcha"></el-input>
-        <span @click="getCaptchaSVG" v-html="captchaSVG"></span>
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
-        <el-button
-          class="submit-btn"
-          type="primary"
-          @click="submitForm('ruleForm')"
-        >登录</el-button>
-      </el-form-item>
-      <el-form-item>
-        <router-link class="tmcu-btn" to="/forgot">忘记密码?</router-link>
-      </el-form-item>
-    </el-form>
+    <div v-if="success" class="success-msg">
+      <span class="tmcu-text">邮件已发送到 {{ ruleForm.email }}</span>
+      <span class="tmcu-btn" @click="tryAgain('ruleForm')">没收到?重新尝试</span>
+    </div>
+    <div v-else>
+      <p class="login-title">忘记密码</p>
+      <el-form
+        :model="ruleForm"
+        status-icon
+        :rules="rules"
+        ref="ruleForm"
+        label-width="100px"
+      >
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="ruleForm.email" auto-complete="on"></el-input>
+        </el-form-item>
+        <el-form-item class="captcha-form-item" label="验证码" prop="captcha">
+          <el-input class="captcha-input" v-model="ruleForm.captcha"></el-input>
+          <span @click="getCaptchaSVG" v-html="captchaSVG"></span>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="resetForm('ruleForm')">重置</el-button>
+          <el-button
+            class="submit-btn"
+            type="primary"
+            :loading="loading"
+            @click="submitForm('ruleForm')"
+          >提交</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script>
-import { loginUser, checkEmailExist, getCaptcha, checkCaptcha } from './api';
+import { forgotPass, checkEmailExist, getCaptcha, checkCaptcha } from './api';
 
 export default {
-  name: 'LoginPage',
+  name: 'ForgotPassword',
   created() {
     this.getCaptchaSVG();
   },
@@ -58,13 +59,6 @@ export default {
         });
       }
     };
-    const validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入密码'));
-      } else {
-        callback();
-      }
-    };
     const validateCaptcha = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入验证码'));
@@ -79,37 +73,37 @@ export default {
       }
     };
     return {
+      success: false,
       ruleForm: {
         email: '',
-        password: '',
         captcha: '',
       },
       rules: {
         email: [
           { validator: checkEmail, trigger: 'blur' },
         ],
-        password: [
-          { validator: validatePass, trigger: 'blur' },
-        ],
         captcha: [
           { validator: validateCaptcha, trigger: 'blur' },
         ],
       },
       captchaSVG: '',
+      loading: false,
     };
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          loginUser({
+          this.loading = true;
+          forgotPass({
             email: this.ruleForm.email,
-            password: this.ruleForm.password,
             captcha: this.ruleForm.captcha,
+            host: window.location.host,
           }).then(() => {
-            this.$store.dispatch('refreshHeader');
-            this.$router.push('/');
+            this.loading = false;
+            this.success = true;
           }).catch((error) => {
+            this.loading = false;
             this.$message.error(error);
             this.getCaptchaSVG();
           });
@@ -126,6 +120,11 @@ export default {
         this.captchaSVG = '获取验证码失败';
         this.$message.error(error);
       });
+    },
+    tryAgain(formName) {
+      this.success = false;
+      this.$refs[formName].resetFields();
+      this.getCaptchaSVG();
     },
   },
 };
@@ -160,5 +159,10 @@ export default {
 <style lang="css">
 .captcha-form-item > .el-form-item__content {
   line-height: normal;
+}
+
+.success-msg {
+  text-align: center;
+  margin-bottom: 20px;
 }
 </style>

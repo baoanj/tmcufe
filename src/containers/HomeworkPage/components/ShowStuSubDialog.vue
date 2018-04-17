@@ -1,7 +1,6 @@
 <template lang="html">
-  <el-dialog
+  <fullscreen-dialog
     :title="`${submission.stuName}(${submission.stuId})提交详情`"
-    width="80%"
     :visible="visible"
     @close="closeDialog"
   >
@@ -34,12 +33,13 @@
         </div>
       </div>
     </div>
-  </el-dialog>
+  </fullscreen-dialog>
 </template>
 
 <script>
 import MarkdownEditor from '@/components/MarkdownEditor';
 import FileList from '@/components/FileList';
+import FullscreenDialog from '@/components/FullscreenDialog';
 import utils from '@/utils';
 import { checkStuSub } from '../api';
 
@@ -58,6 +58,7 @@ export default {
   components: {
     MarkdownEditor,
     FileList,
+    FullscreenDialog,
   },
   data() {
     return {

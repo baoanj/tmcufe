@@ -1,8 +1,6 @@
 <template lang="html">
-  <el-dialog
+  <fullscreen-dialog
     title="创建作业"
-    :fullscreen="true"
-    :center="true"
     :visible="dialogVisible"
     @close="closeDialog"
   >
@@ -49,12 +47,13 @@
         >提交</el-button>
       </el-form-item>
     </el-form>
-  </el-dialog>
+  </fullscreen-dialog>
 </template>
 
 <script>
 import MarkdownEditor from '@/components/MarkdownEditor';
 import UploadFiles from '@/components/UploadFiles';
+import FullscreenDialog from '@/components/FullscreenDialog';
 import SimpleFormData from '@/utils/simpleFormData';
 import { addHomework } from '../api';
 
@@ -73,6 +72,7 @@ export default {
   components: {
     MarkdownEditor,
     UploadFiles,
+    FullscreenDialog,
   },
   data() {
     const checkTitle = (rule, value, callback) => {

@@ -1,9 +1,7 @@
 <template lang="html">
-  <el-dialog
+  <fullscreen-dialog
     title="修改班级信息"
     :visible="visible"
-    :fullscreen="true"
-    :center="true"
     @close="closeDialog"
   >
     <el-form
@@ -41,17 +39,19 @@
         >提交</el-button>
       </el-form-item>
     </el-form>
-  </el-dialog>
+  </fullscreen-dialog>
 </template>
 
 <script>
 import MarkdownEditor from '@/components/MarkdownEditor';
+import FullscreenDialog from '@/components/FullscreenDialog';
 import { updateClassMsg } from '../api';
 
 export default {
   name: 'EditClassDialog',
   components: {
     MarkdownEditor,
+    FullscreenDialog,
   },
   data() {
     const checkName = (rule, value, callback) => {

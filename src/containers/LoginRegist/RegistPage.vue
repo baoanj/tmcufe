@@ -165,6 +165,7 @@ export default {
             this.$router.push('/login');
           }).catch((error) => {
             this.$message.error(error);
+            this.getCaptchaSVG();
           });
         }
       });

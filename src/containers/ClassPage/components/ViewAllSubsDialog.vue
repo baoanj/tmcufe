@@ -1,7 +1,6 @@
 <template lang="html">
-  <el-dialog
+  <fullscreen-dialog
     title="所有作业提交的数据统计"
-    :fullscreen="true"
     :visible="visible"
     @close="closeDialog"
   >
@@ -15,14 +14,18 @@
       />
       <v-point position="title*amountOfSubs" shape="circle" />
     </v-chart>
-  </el-dialog>
+  </fullscreen-dialog>
 </template>
 
 <script>
+import FullscreenDialog from '@/components/FullscreenDialog';
 import utils from '@/utils';
 
 export default {
   name: 'ViewAllSubsDialog',
+  components: {
+    FullscreenDialog,
+  },
   data() {
     const that = this;
     return {

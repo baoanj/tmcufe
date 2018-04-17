@@ -1,7 +1,6 @@
 <template lang="html">
-  <el-dialog
+  <fullscreen-dialog
     :title="`${stuName}(${stuId})-所有作业提交的数据统计`"
-    :fullscreen="true"
     :visible="visible"
     @close="closeDialog"
   >
@@ -46,13 +45,14 @@
       </div>
     </div>
     <p v-if="showDetail === null">学生尚未提交</p>
-  </el-dialog>
+  </fullscreen-dialog>
 </template>
 
 <script>
 import utils from '@/utils';
 import MarkdownEditor from '@/components/MarkdownEditor';
 import FileList from '@/components/FileList';
+import FullscreenDialog from '@/components/FullscreenDialog';
 import { getStuSubs } from '../api';
 
 const DataSet = require('@antv/data-set');
@@ -62,6 +62,7 @@ export default {
   components: {
     MarkdownEditor,
     FileList,
+    FullscreenDialog,
   },
   computed: {
     dvRows() {
