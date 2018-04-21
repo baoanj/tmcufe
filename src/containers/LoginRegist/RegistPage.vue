@@ -3,53 +3,64 @@
     <vue-headful
       title="高校教学管理系统 | 注册"
     />
-    <p class="regist-title">用户注册</p>
-    <el-form
-      :model="ruleForm"
-      status-icon
-      :rules="rules"
-      ref="ruleForm"
-      label-width="100px"
-    >
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="ruleForm.email" auto-complete="on"></el-input>
-      </el-form-item>
-      <el-form-item label="姓名" prop="name">
-        <el-input v-model="ruleForm.name" auto-complete="on"></el-input>
-      </el-form-item>
-      <el-form-item v-show="ruleForm.role === 'student'" label="学号" prop="stuId">
-        <el-input v-model="ruleForm.stuId" auto-complete="on"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="ruleForm.password" auto-complete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="确认密码" prop="checkPass">
-        <el-input type="password" v-model="ruleForm.checkPass" auto-complete="off"></el-input>
-      </el-form-item>
-      <el-form-item class="captcha-form-item" label="验证码" prop="captcha">
-        <el-input class="captcha-input" v-model="ruleForm.captcha"></el-input>
-        <span @click="getCaptchaSVG" v-html="captchaSVG"></span>
-      </el-form-item>
-      <el-form-item>
-        <el-radio-group v-model="ruleForm.role">
-          <el-radio label="student">学生</el-radio>
-          <el-radio label="teacher">老师</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
-        <el-button
-          class="submit-btn"
-          type="primary"
-          @click="submitForm('ruleForm')"
-        >提交</el-button>
-      </el-form-item>
-    </el-form>
+    <div v-if="success" class="success-msg">
+      <span class="tmcu-text">
+        {{ mailLoading ? '' : `邮件已发送到 ${ruleForm.email} 邮箱激活后才能登录` }}
+      </span>
+      <el-button type="text" :loading="mailLoading" @click="tryAgain">
+        {{ mailLoading ? '正在发送...' : '没收到?重新发送' }}
+      </el-button>
+    </div>
+    <div v-else>
+      <p class="regist-title">用户注册</p>
+      <el-form
+        :model="ruleForm"
+        status-icon
+        :rules="rules"
+        ref="ruleForm"
+        label-width="100px"
+      >
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="ruleForm.email" auto-complete="on"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="ruleForm.name" auto-complete="on"></el-input>
+        </el-form-item>
+        <el-form-item v-show="ruleForm.role === 'student'" label="学号" prop="stuId">
+          <el-input v-model="ruleForm.stuId" auto-complete="on"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="ruleForm.password" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="checkPass">
+          <el-input type="password" v-model="ruleForm.checkPass" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item class="captcha-form-item" label="验证码" prop="captcha">
+          <el-input class="captcha-input" v-model="ruleForm.captcha"></el-input>
+          <span @click="getCaptchaSVG" v-html="captchaSVG"></span>
+        </el-form-item>
+        <el-form-item>
+          <el-radio-group v-model="ruleForm.role">
+            <el-radio label="student">学生</el-radio>
+            <el-radio label="teacher">老师</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="resetForm('ruleForm')">重置</el-button>
+          <el-button
+            class="submit-btn"
+            type="primary"
+            :loading="loading"
+            @click="submitForm('ruleForm')"
+          >提交</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script>
-import { registUser, checkEmailExist, getCaptcha, checkCaptcha } from './api';
+import { registUser, checkEmailExist, getCaptcha, checkCaptcha, sendEmailAgain } from './api';
 
 export default {
   name: 'RegistPage',
@@ -147,12 +158,16 @@ export default {
         ],
       },
       captchaSVG: '',
+      success: false,
+      mailLoading: false,
+      loading: false,
     };
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.loading = true;
           registUser({
             name: this.ruleForm.name,
             stuId: this.ruleForm.stuId,
@@ -160,10 +175,12 @@ export default {
             password: this.ruleForm.password,
             role: this.ruleForm.role,
             captcha: this.ruleForm.captcha,
+            host: window.location.host,
           }).then(() => {
-            this.$message.success('注册成功，请登录');
-            this.$router.push('/login');
+            this.loading = false;
+            this.success = true;
           }).catch((error) => {
+            this.loading = false;
             this.$message.error(error);
             this.getCaptchaSVG();
           });
@@ -180,6 +197,19 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    tryAgain() {
+      this.mailLoading = true;
+      sendEmailAgain({
+        email: this.ruleForm.email,
+        host: window.location.host,
+      }).then(() => {
+        this.$message.success('发送成功');
+        this.mailLoading = false;
+      }).catch((error) => {
+        this.$message.error(error);
+        this.mailLoading = false;
+      });
     },
   },
 };
@@ -208,6 +238,11 @@ export default {
 .captcha-input {
   width: 50%;
   vertical-align: top;
+}
+
+.success-msg {
+  text-align: center;
+  margin-bottom: 20px;
 }
 </style>
 

@@ -26,18 +26,27 @@
         <el-button
           class="submit-btn"
           type="primary"
+          :loading="loading"
           @click="submitForm('ruleForm')"
         >登录</el-button>
       </el-form-item>
       <el-form-item>
         <router-link class="tmcu-btn" to="/forgot">忘记密码?</router-link>
+        <span v-if="emailNotActivate" class="email-not-activate">
+          <span class="email-not-activate-warnning">邮箱未激活</span>
+          <el-button
+            type="text"
+            :loading="activateLoading"
+            @click="activateNow"
+          >立即激活</el-button>
+        </span>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import { loginUser, checkEmailExist, getCaptcha, checkCaptcha } from './api';
+import { loginUser, checkEmailExist, getCaptcha, checkCaptcha, sendEmailAgain } from './api';
 
 export default {
   name: 'LoginPage',
@@ -96,24 +105,48 @@ export default {
         ],
       },
       captchaSVG: '',
+      emailNotActivate: false,
+      loading: false,
+      activateLoading: false,
     };
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.loading = true;
           loginUser({
             email: this.ruleForm.email,
             password: this.ruleForm.password,
             captcha: this.ruleForm.captcha,
           }).then(() => {
+            this.loading = false;
             this.$store.dispatch('refreshHeader');
             this.$router.push('/');
           }).catch((error) => {
-            this.$message.error(error);
-            this.getCaptchaSVG();
+            this.loading = false;
+            if (error === '邮箱未激活') {
+              this.emailNotActivate = true;
+            } else {
+              this.$message.error(error);
+              this.getCaptchaSVG();
+            }
           });
         }
+      });
+    },
+    activateNow() {
+      this.activateLoading = true;
+      sendEmailAgain({
+        email: this.ruleForm.email,
+        host: window.location.host,
+      }).then(() => {
+        this.activateLoading = false;
+        this.emailNotActivate = false;
+        this.$message.success(`邮件已发送到 ${this.ruleForm.email} 请前往激活`);
+      }).catch((error) => {
+        this.activateLoading = false;
+        this.$message.error(error);
       });
     },
     resetForm(formName) {
@@ -154,6 +187,15 @@ export default {
 .captcha-input {
   width: 50%;
   vertical-align: top;
+}
+
+.email-not-activate {
+  float: right;
+}
+
+.email-not-activate-warnning {
+  color: #f56c6c;
+  font-size: 14px;
 }
 </style>
 

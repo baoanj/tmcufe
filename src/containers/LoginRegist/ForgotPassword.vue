@@ -5,7 +5,7 @@
     />
     <div v-if="success" class="success-msg">
       <span class="tmcu-text">邮件已发送到 {{ ruleForm.email }}</span>
-      <span class="tmcu-btn" @click="tryAgain('ruleForm')">没收到?重新尝试</span>
+      <span class="tmcu-btn" @click="tryAgain">没收到?重新尝试</span>
     </div>
     <div v-else>
       <p class="login-title">忘记密码</p>
@@ -121,9 +121,10 @@ export default {
         this.$message.error(error);
       });
     },
-    tryAgain(formName) {
+    tryAgain() {
       this.success = false;
-      this.$refs[formName].resetFields();
+      this.ruleForm.email = '';
+      this.ruleForm.captcha = '';
       this.getCaptchaSVG();
     },
   },

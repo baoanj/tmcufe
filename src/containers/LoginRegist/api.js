@@ -127,3 +127,35 @@ export function resetPass(resetId, params) {
       });
   });
 }
+
+export function sendEmailAgain(params) {
+  return new Promise((resolve, reject) => {
+    axios.post('/api/general/sendEmail', params)
+      .then((result) => {
+        if (result.stats === 0) {
+          reject(result.data.error);
+        } else {
+          resolve();
+        }
+      })
+      .catch(() => {
+        reject('网络错误');
+      });
+  });
+}
+
+export function activateEmail(activateId) {
+  return new Promise((resolve, reject) => {
+    axios.put(`/api/general/activateEmail/${activateId}`)
+      .then((result) => {
+        if (result.stats === 0) {
+          reject(result.data.error);
+        } else {
+          resolve();
+        }
+      })
+      .catch(() => {
+        reject('网络错误');
+      });
+  });
+}

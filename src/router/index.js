@@ -5,6 +5,7 @@ import RegistPage from '@/containers/LoginRegist/RegistPage';
 import LoginPage from '@/containers/LoginRegist/LoginPage';
 import ForgotPassword from '@/containers/LoginRegist/ForgotPassword';
 import ResetPassword from '@/containers/LoginRegist/ResetPassword';
+import ActivateEmail from '@/containers/LoginRegist/ActivateEmail';
 import ClassPage from '@/containers/ClassPage';
 import NotFound from '@/containers/NotFound';
 import HomeworkPage from '@/containers/HomeworkPage';
@@ -38,6 +39,11 @@ export default new Router({
       path: '/reset/:resetId',
       name: 'ResetPassword',
       component: ResetPassword,
+    },
+    {
+      path: '/activate/:activateId',
+      name: 'ActivateEmail',
+      component: ActivateEmail,
     },
     {
       path: '/class/:classId',
