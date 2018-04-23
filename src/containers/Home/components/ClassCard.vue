@@ -7,6 +7,9 @@
           :title="classs.name"
           :to="{ name: 'ClassPage', params: { classId: classs.classId } }"
         >{{ classs.name }}</router-link>
+        <el-tooltip v-if="isTA" effect="light" content="你是这个班级的助教" placement="right">
+          <span class="ta-tag">TA</span>
+        </el-tooltip>
       </div>
       <div>
         <el-form label-width="80px" size="small">
@@ -44,6 +47,15 @@ export default {
     move: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    isTA() {
+      const userEmail = this.$store.state.user.email;
+      for (let i = 0; i < this.classs.tas.length; i += 1) {
+        if (this.classs.tas[i].email === userEmail) return true;
+      }
+      return false;
     },
   },
 };
@@ -86,6 +98,7 @@ export default {
 }
 
 .card-text-btn {
+  display: inline-block;
   text-decoration: none;
   color: #409eff;
   white-space: nowrap;
@@ -103,5 +116,26 @@ export default {
 
 .el-form-item--small.el-form-item {
   margin-bottom: 0;
+}
+
+.ta-tag {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  color: #409eff;
+  border: 1px solid #409eff;
+  border-radius: 50%;
+  padding: 4px 5px;
+}
+</style>
+
+<style lang="css">
+.box-card-1 .el-card__header {
+  position: relative;
+  padding: 10px 50px 10px 10px;
+}
+
+.box-card-1 .el-card__body {
+  position: relative;
 }
 </style>

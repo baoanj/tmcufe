@@ -4,6 +4,14 @@
     :visible="visible"
     @close="closeDialog"
   >
+    <div>
+      <p v-if="submission.checked">
+        <el-tag size="small">已审阅</el-tag>
+        <span>反馈结果: {{ submission.feedback || '无' }}</span>
+      </p>
+      <p v-else><el-tag type="warning" size="small">未审阅</el-tag></p>
+    </div>
+    <br />
     <p>提交时间: {{ formateDate(submission.date) }}</p>
     <div>
       <markdown-editor
@@ -12,25 +20,20 @@
       />
       <file-list :files="submission.files" />
     </div>
-    <div>
-      <p v-if="submission.checked">
-        <span>已审阅</span>
-        <span>反馈结果: {{ submission.feedback || '无' }}</span>
-      </p>
-      <div v-else>
-        <p>未审阅</p>
-        <div>
-          <p>填写反馈:</p>
-          <el-input
-            type="textarea"
-            :autosize="{ minRows: 2, maxRows: 10}"
-            placeholder="请输入内容"
-            v-model="feedback">
-          </el-input>
-        </div>
-        <div class="submit-btn">
-          <el-button type="primary" @click="submitFeedback">提交</el-button>
-        </div>
+    <br />
+    <div v-if="!submission.checked">
+      <div>
+        <p>填写反馈:</p>
+        <el-input
+          type="textarea"
+          :autosize="{ minRows: 2, maxRows: 10}"
+          placeholder="请输入反馈（可选）"
+          v-model="feedback">
+        </el-input>
+      </div>
+      <br />
+      <div class="submit-btn">
+        <el-button type="primary" @click="submitFeedback">提交</el-button>
       </div>
     </div>
   </fullscreen-dialog>

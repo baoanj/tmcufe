@@ -17,6 +17,9 @@
               <i class="el-icon-edit"></i>
             </el-button>
           </span>
+          <span class="class-ta tmcu-btn" @click="showClassTasDialog()">
+            {{ $store.state.user.role | taStatus(classs.tas.length) }}
+          </span>
         </div>
         <p>
           <span class="class-info tmcu-text">班级Id：{{ classs.classId }}</span>
@@ -33,9 +36,9 @@
     <el-tabs v-model="activeTabName">
       <el-tab-pane label="作业" name="homework">
         <div class="hw-container">
-          <div v-if="$store.state.user.role === 'teacher'" class="hw-content">
+          <div v-if="$store.state.user.role === 'teacher' || isTA" class="hw-content">
             <span class="hw-total">作业数量: {{ classs.homeworks.length }}</span>
-            <el-button type="primary" @click="addHomework">创建作业</el-button>
+            <el-button v-if="!isTA" type="primary" @click="addHomework">创建作业</el-button>
             <el-button type="primary" @click="viewAllSubs">数据统计</el-button>
           </div>
           <div v-else class="hw-content">
@@ -49,6 +52,7 @@
             :key="homework.createDate"
             :classId="classs.classId"
             :homework="homework"
+            :isTA="isTA"
           />
         </div>
       </el-tab-pane>
@@ -59,7 +63,7 @@
           @fetchData="fetchData"
         />
       </el-tab-pane>
-      <el-tab-pane v-if="$store.state.user.role === 'teacher'" label="学生" name="student">
+      <el-tab-pane v-if="$store.state.user.role === 'teacher' || isTA" label="学生" name="student">
         <p>学生数量: {{ classs.students.length }}</p>
         <div>
           <students-table
@@ -85,6 +89,11 @@
     <view-stu-subs-dialog
       ref="viewStuSubsDialogRef"
     />
+    <class-tas-dialog
+      ref="classTasDialogRef"
+      :classId="classs.classId"
+      @fetchData="fetchData"
+    />
   </div>
 </template>
 
@@ -98,6 +107,7 @@ import CoursewarePane from './components/CoursewarePane';
 import EditClassDialog from './components/EditClassDialog';
 import ViewAllSubsDialog from './components/ViewAllSubsDialog';
 import ViewStuSubsDialog from './components/ViewStuSubsDialog';
+import ClassTasDialog from './components/ClassTasDialog';
 
 export default {
   name: 'ClassPage',
@@ -113,6 +123,7 @@ export default {
     EditClassDialog,
     ViewAllSubsDialog,
     ViewStuSubsDialog,
+    ClassTasDialog,
   },
   data() {
     return {
@@ -125,6 +136,7 @@ export default {
         students: [],
         homeworks: [],
         coursewares: [],
+        tas: [],
       },
       activeTabName: 'homework',
       addHwDialogVisible: false,
@@ -133,6 +145,13 @@ export default {
   computed: {
     reverseHomeworks() {
       return this.classs.homeworks.slice().reverse();
+    },
+    isTA() {
+      const userEmail = this.$store.state.user.email;
+      for (let i = 0; i < this.classs.tas.length; i += 1) {
+        if (this.classs.tas[i].email === userEmail) return true;
+      }
+      return false;
     },
   },
   methods: {
@@ -159,6 +178,19 @@ export default {
         this.classs.students[0].name,
         this.classs.students[0].stuId,
       );
+    },
+    showClassTasDialog() {
+      this.$refs.classTasDialogRef.show(this.classs.tas);
+    },
+  },
+  filters: {
+    taStatus(role, length) {
+      if (length) {
+        return '查看助教';
+      } else if (role === 'student') {
+        return '暂无助教';
+      }
+      return '添加助教';
     },
   },
 };
@@ -220,5 +252,9 @@ export default {
   color: #606266;
   font-size: 14px;
   margin-right: 20px;
+}
+
+.class-ta {
+  float: right;
 }
 </style>

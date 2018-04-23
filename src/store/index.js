@@ -8,6 +8,7 @@ const state = {
   user: {
     name: '',
     stuId: '',
+    email: '',
     role: '',
   },
 };
@@ -22,6 +23,7 @@ const actions = {
           state.user = {
             name: '',
             stuId: '',
+            email: '',
             role: '',
           };
         }
@@ -30,6 +32,7 @@ const actions = {
         state.user = {
           name: '',
           stuId: '',
+          email: '',
           role: '',
         };
       });

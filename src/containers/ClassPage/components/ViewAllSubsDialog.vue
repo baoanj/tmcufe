@@ -63,7 +63,7 @@ export default {
       },
       labels: {
         formatter(val) {
-          if (val.length > 6) return `${val.slice(0, 3)}..`;
+          if (val.length > 6) return `${val.slice(0, 5)}..`;
           return val;
         },
       },

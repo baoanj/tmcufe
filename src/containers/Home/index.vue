@@ -66,6 +66,7 @@
       @fetchData="fetchData"
     />
   </div>
+  <div v-else class="default-home"></div>
 </template>
 
 <script>
@@ -195,5 +196,13 @@ export default {
   padding-left: 10px;
   font-size: 14px;
   color: #606266;
+}
+
+.default-home {
+  width: 100%;
+  height: calc(100vh - 100px);
+  background-image: url('/static/logo.png');
+  background-position: center;
+  background-repeat: no-repeat;
 }
 </style>

@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="12">
         <router-link class="header-link" to="/">
-          <img class="logo-img" src="static/logo.png" alt="高校教学管理系统" />
+          <img class="logo-img" src="/static/logo.png" alt="高校教学管理系统" />
         </router-link>
       </el-col>
       <el-col :span="12">

@@ -97,3 +97,17 @@ export function getStuSubs(classId, userId) {
     });
   });
 }
+
+export function updateClassTas(classId, params) {
+  return new Promise((resolve, reject) => {
+    axios.put(`/api/teacher/updateClassTas/${classId}`, params).then((result) => {
+      if (result.stats === 0) {
+        reject(result.data.error);
+      } else {
+        resolve();
+      }
+    }).catch(() => {
+      reject('网络错误');
+    });
+  });
+}

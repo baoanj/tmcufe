@@ -20,7 +20,7 @@
           </span>
           <span class="hw-answer tmcu-btn" @click="showHwAnswerDialog()">
             {{ $store.state.user.role |
-              answerStatus(homework.hwAnswer.answer, homework.hwAnswer.files.length) }}
+              answerStatus(homework.hwAnswer.answer, homework.hwAnswer.files.length, isTA) }}
           </span>
         </p>
         <p>
@@ -35,7 +35,7 @@
       />
       <file-list :files="homework.files" />
     </div>
-    <div v-if="$store.state.user.role === 'teacher'">
+    <div v-if="$store.state.user.role === 'teacher' || isTA">
       <p class="tmcu-text">共 {{ homework.submissions.length }} 人提交</p>
       <submissions-table
         :submissions="homework.submissions"
@@ -44,10 +44,10 @@
         @fetchData="fetchData"
       />
     </div>
-    <div v-if="$store.state.user.role === 'student'">
+    <div v-if="$store.state.user.role === 'student' && !isTA">
       <div v-if="homework.submissions.length">
         <p class="tmcu-text">
-          <span>已提交</span>
+          <el-tag size="small">已提交</el-tag>
           <span v-if="!homework.submissions[0].checked && expired === 2">
             <el-button type="text" @click="editingSub = homework.submissions[0]">编辑</el-button>
           </span>
@@ -56,22 +56,21 @@
           </span>
         </p>
         <p class="tmcu-text">
-          <span>姓名: {{ homework.submissions[0].stuName }}</span>
-          <span>学号: {{ homework.submissions[0].stuId }}</span>
           <span>提交时间: {{ formateDate(homework.submissions[0].date) }}</span>
         </p>
         <div class="tmcu-text">
           <p v-if="homework.submissions[0].checked">
-            <span>老师已审阅</span>
+            <el-tag size="small">已审阅</el-tag>
             <span>反馈结果: {{ homework.submissions[0].feedback || '无' }}</span>
           </p>
-          <p v-else>老师还未审阅</p>
+          <p v-else><el-tag type="warning" size="small">未审阅</el-tag></p>
         </div>
         <div v-if="editingSub">
           <p>
-            <span class="tmcu-text">修改已提交作业</span>
+            <span class="tmcu-text">正在修改已提交作业</span>
             <el-button type="text" @click="editingSub = null">放弃修改</el-button>
           </p>
+          <br />
           <submit-homework
             :classId="$route.params.classId"
             :createDate="homework.createDate"
@@ -83,6 +82,7 @@
         </div>
         <div v-else>
           <p class="tmcu-text">提交详情:</p>
+          <br />
           <markdown-editor
             :value="homework.submissions[0].answer"
             :edit="false"
@@ -91,7 +91,8 @@
         </div>
       </div>
       <div v-else>
-        <p class="tmcu-text">未提交</p>
+        <p><el-tag type="danger" size="small">未提交</el-tag></p>
+        <br />
         <submit-homework
           v-if="expired === 2"
           :classId="$route.params.classId"
@@ -107,6 +108,7 @@
       ref="hwAnswerDialogRef"
       :classId="$route.params.classId"
       :createDate="homework.createDate"
+      :isTA="isTA"
       @fetchData="fetchData"
     />
     <edit-homework-dialog
@@ -150,6 +152,13 @@ export default {
       }
       return 2;
     },
+    isTA() {
+      const userEmail = this.$store.state.user.email;
+      for (let i = 0; i < this.homework.tas.length; i += 1) {
+        if (this.homework.tas[i].email === userEmail) return true;
+      }
+      return false;
+    },
   },
   data() {
     return {
@@ -165,6 +174,7 @@ export default {
           answer: '',
           files: [],
         },
+        tas: [],
       },
       editingSub: null,
       loading: false,
@@ -182,16 +192,22 @@ export default {
         });
     },
     deleteHwSub() {
-      this.loading = true;
-      deleteHwSubApi(this.$route.params.classId, this.$route.params.createDate)
-        .then(() => {
-          this.loading = false;
-          this.fetchData();
-        })
-        .catch((error) => {
-          this.loading = false;
-          this.$message.error(error);
-        });
+      this.$confirm('确认撤销作业提交？撤销操作不可逆！', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        this.loading = true;
+        deleteHwSubApi(this.$route.params.classId, this.$route.params.createDate)
+          .then(() => {
+            this.loading = false;
+            this.fetchData();
+          })
+          .catch((error) => {
+            this.loading = false;
+            this.$message.error(error);
+          });
+      }).catch(() => {});
     },
     formateDate(timestamp) {
       return utils.formateDate(+timestamp);
@@ -212,10 +228,10 @@ export default {
       }
       return '进行中';
     },
-    answerStatus(role, answer, length) {
+    answerStatus(role, answer, length, isTA) {
       if (answer || length) {
         return '查看答案';
-      } else if (role === 'student') {
+      } else if (role === 'student' && !isTA) {
         return '暂无答案';
       }
       return '上传答案';

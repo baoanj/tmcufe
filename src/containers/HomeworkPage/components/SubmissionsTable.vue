@@ -23,7 +23,7 @@
         label="状态"
       >
         <template slot-scope="scope">
-          <el-tag :type="scope.row.checked ? 'info' : 'success'" size="small">
+          <el-tag :type="scope.row.checked ? '' : 'warning'" size="small">
             {{ formatterStatus(scope.row.checked) }}
           </el-tag>
         </template>

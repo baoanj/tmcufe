@@ -3,7 +3,7 @@
     <vue-headful
       title="高校教学管理系统 | 页面不存在"
     />
-    <p>404</p>
+    <div class="owText">404</div>
   </div>
 </template>
 
@@ -14,4 +14,30 @@ export default {
 </script>
 
 <style lang="css" scoped>
+/* 参考：https://www.html5tricks.com/css3-3d-stroke-text.html */
+.owText {
+  text-align: center;
+  -webkit-text-stroke: 2px white;
+  position: relative;
+  text-transform: uppercase;
+  color: #252527;
+  font-size: 14vw;
+  letter-spacing: 1.2vw;
+  font-weight: 700;
+  text-shadow: 0 1px 0 #4a4a4e, -1px -1px 0 #4a4a4e, -1px 0px 0 #343437, -2px 1px 0 #343437,
+    -3px 2px 0 #313134, -4px 3px 0 #2f2f31, -5px 4px 0 #2c2c2f, -6px 5px 0 #2a2a2c,
+    -7px 6px 0 #27272a, -8px 7px 0 #252527, -9px 8px 0 #232324, -10px 9px 0 #202022,
+    -11px 10px 0 #1e1e1f, -12px 11px 0 #1b1b1d, -13px 12px 0 #19191a, -14px 13px 0 #161617,
+    -15px 14px 0 #141415, -16px 15px 0 #111112, 0 -1px 1px #ffffff, 0 -2px 0px #ffffff,
+    -15px 14px 0px #ffffff, -16px 15px 0px #ffffff, -17px 16px 0px #ffffff, -18px 17px 0px #ffffff,
+    -2px -1px 0 #ffffff, -3px 0px 0 #ffffff, -19px 15px 0 #ffffff, -18px 14px 0 #ffffff,
+    -17px 13px 0 #ffffff, -16px 12px 0 #ffffff, -15px 11px 0 #ffffff, -14px 10px 0 #ffffff,
+    -13px 9px 0 #ffffff, -12px 8px 0 #ffffff, -11px 7px 0 #ffffff, -10px 6px 0 #ffffff,
+    -9px 5px 0 #ffffff, -8px 4px 0 #ffffff, -7px 3px 0 #ffffff, -6px 2px 0 #ffffff,
+    -5px 1px 0 #ffffff, -4px 0px 0 #ffffff, 0px 2px 0px #ffffff, -1px 3px 0px #ffffff,
+    -2px 4px 0px #ffffff, -3px 5px 0px #ffffff, -4px 6px 0px #ffffff, -5px 7px 0px #ffffff,
+    -6px 8px 0px #ffffff, -7px 9px 0px #ffffff, -8px 10px 0px #ffffff, -9px 11px 0px #ffffff,
+    -10px 12px 0px #ffffff, -11px 13px 0px #ffffff, -12px 14px 0px #ffffff, -13px 15px 0px #ffffff,
+    -14px 16px 0px #ffffff, -15px 17px 0px #ffffff;
+}
 </style>

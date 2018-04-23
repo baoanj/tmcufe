@@ -4,7 +4,7 @@
     :visible="visible"
     @close="closeDialog"
   >
-    <div v-if="$store.state.user.role === 'student'">
+    <div v-if="$store.state.user.role === 'student' && !isTA">
       <div v-if="staticAnswer || staticFileList.length">
         <markdown-editor
           v-if="staticAnswer"
@@ -15,14 +15,15 @@
       </div>
       <p v-else>暂无答案</p>
     </div>
-    <div v-if="$store.state.user.role === 'teacher'">
+    <div v-if="$store.state.user.role === 'teacher' || isTA">
       <div v-if="!editable && (staticAnswer || staticFileList.length)">
-        <div class="answer-op">
+        <div>
           <el-button @click="editable = true">编辑</el-button>
           <el-button @click="deleteAnswer" :loading="loading">
             {{ loading ? '删除中...' : '删除'}}
           </el-button>
         </div>
+        <br />
         <markdown-editor
           :value="staticAnswer"
           :edit="false"
@@ -30,7 +31,7 @@
         <file-list :files="staticFileList" />
       </div>
       <div v-else>
-        <div class="answer-op">
+        <div>
           <el-button
             v-if="staticAnswer || staticFileList.length"
             @click="cancelEdit"
@@ -39,11 +40,13 @@
             {{ loading ? '提交中...' : '提交' }}
           </el-button>
         </div>
+        <br />
         <markdown-editor
           :value="answer"
           @change="(val) => answer = val"
         />
-        <div class="answer-upload">
+        <br />
+        <div>
           <upload-files :files="fileList" @change="val => fileList = val" />
         </div>
       </div>
@@ -70,6 +73,10 @@ export default {
     createDate: {
       type: String,
       default: '',
+    },
+    isTA: {
+      type: Boolean,
+      default: false,
     },
   },
   components: {
@@ -154,13 +161,5 @@ export default {
 <style lang="css" scoped>
 .submit-btn {
   float: right;
-}
-
-.answer-op {
-  margin-bottom: 20px;
-}
-
-.answer-upload {
-  margin-top: 20px;
 }
 </style>

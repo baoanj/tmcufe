@@ -4,7 +4,9 @@
       :value="answer"
       @change="(val) => answer = val"
     />
+    <br />
     <upload-files :files="fileList" @change="val => fileList = val" />
+      <br />
     <div class="submit-btn">
       <el-button @click="resetAnswer">清空</el-button>
       <el-button
