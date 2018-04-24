@@ -155,7 +155,7 @@ export default {
       }
     },
     formateDate(timestamp) {
-      return utils.formateDate(+timestamp);
+      return timestamp ? utils.formateDate(+timestamp) : '--';
     },
     closeDialog() {
       this.visible = false;

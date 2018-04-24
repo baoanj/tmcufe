@@ -65,14 +65,14 @@ export default {
   },
   methods: {
     formateDate(timestamp) {
-      return utils.formateDate(+timestamp);
+      return timestamp ? utils.formateDate(+timestamp) : '--';
     },
   },
   computed: {
     expired() {
-      if (this.homework.beginDate > Date.now()) {
+      if (this.homework.beginDate && this.homework.beginDate > Date.now()) {
         return 0;
-      } else if (this.homework.endDate < Date.now()) {
+      } else if (this.homework.endDate && this.homework.endDate < Date.now()) {
         return 1;
       }
       return 2;

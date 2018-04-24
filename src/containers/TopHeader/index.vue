@@ -12,12 +12,13 @@
             {{ $store.state.user.name }}
             {{ $store.state.user.role | roleFilter($store.state.user.stuId) }}
           </span>
+          <span class="user-img"></span>
           <el-dropdown
             placement="bottom"
             @command="handleCommand"
           >
             <span class="el-dropdown-link">
-              <i class="el-icon-arrow-down el-icon--right"></i>
+              <i class="el-icon-caret-bottom el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
@@ -118,5 +119,18 @@ export default {
 .logo-img {
   position: relative;
   top: 5px;
+}
+
+.user-img {
+  display: inline-block;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  position: relative;
+  bottom: 10px;
+  vertical-align: bottom;
+  background-image: url('/static/user.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 </style>

@@ -77,7 +77,9 @@
             :text="editingSub.answer"
             :files="editingSub.files"
             :editing="true"
+            :draft="homework.draft"
             @fetchData="fetchData"
+            @fetchDataByDraft="fetchDataByDraft"
           />
         </div>
         <div v-else>
@@ -100,7 +102,9 @@
           text=""
           :files="[]"
           :editing="false"
+          :draft="homework.draft"
           @fetchData="fetchData"
+          @fetchDataByDraft="fetchDataByDraft"
         />
       </div>
     </div>
@@ -145,9 +149,9 @@ export default {
   },
   computed: {
     expired() {
-      if (this.homework.beginDate > Date.now()) {
+      if (this.homework.beginDate && this.homework.beginDate > Date.now()) {
         return 0;
-      } else if (this.homework.endDate < Date.now()) {
+      } else if (this.homework.endDate && this.homework.endDate < Date.now()) {
         return 1;
       }
       return 2;
@@ -175,6 +179,7 @@ export default {
           files: [],
         },
         tas: [],
+        draft: null,
       },
       editingSub: null,
       loading: false,
@@ -186,6 +191,15 @@ export default {
         .then((data) => {
           this.homework = data;
           this.editingSub = null;
+        })
+        .catch((error) => {
+          this.$message.error(error);
+        });
+    },
+    fetchDataByDraft() {
+      getHwSubsData(this.$route.params.classId, this.$route.params.createDate)
+        .then((data) => {
+          this.homework = data;
         })
         .catch((error) => {
           this.$message.error(error);
@@ -210,7 +224,7 @@ export default {
       }).catch(() => {});
     },
     formateDate(timestamp) {
-      return utils.formateDate(+timestamp);
+      return timestamp ? utils.formateDate(+timestamp) : '--';
     },
     showHwAnswerDialog() {
       this.$refs.hwAnswerDialogRef.show(this.homework.hwAnswer);

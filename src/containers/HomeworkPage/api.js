@@ -115,3 +115,17 @@ export function updateHomeworkMsg(classId, createDate, params) {
     });
   });
 }
+
+export function updateHwDraft(classId, createDate, params) {
+  return new Promise((resolve, reject) => {
+    axios.put(`/api/student/updateHwDraft/${classId}/${createDate}`, params).then((result) => {
+      if (result.stats === 0) {
+        reject(result.data.error);
+      } else {
+        resolve();
+      }
+    }).catch(() => {
+      reject('网络错误');
+    });
+  });
+}

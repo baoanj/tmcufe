@@ -1,5 +1,13 @@
 <template lang="html">
-  <div>
+  <div class="submit-homework">
+    <div class="draft-btns">
+      <el-button
+        v-if="this.draft"
+        type="text"
+        @click="readDraft"
+      >读取草稿</el-button>
+      <el-button type="text" :loading="draftLoading" @click="storageDraft">存草稿</el-button>
+    </div>
     <markdown-editor
       :value="answer"
       @change="(val) => answer = val"
@@ -30,7 +38,7 @@ import MarkdownEditor from '@/components/MarkdownEditor';
 import UploadFiles from '@/components/UploadFiles';
 import SimpleFormData from '@/utils/simpleFormData';
 import utils from '@/utils';
-import { submitHw, updateAnswerApi } from '../api';
+import { submitHw, updateAnswerApi, updateHwDraft } from '../api';
 
 export default {
   name: 'SubmitHomework',
@@ -61,12 +69,19 @@ export default {
       type: Boolean,
       default: false,
     },
+    draft: {
+      type: Object,
+      default() {
+        return null;
+      },
+    },
   },
   data() {
     return {
       answer: this.text,
       fileList: this.files,
       loading: false,
+      draftLoading: false,
     };
   },
   methods: {
@@ -111,9 +126,41 @@ export default {
       this.answer = '';
       this.fileList = [];
     },
+    readDraft() {
+      this.answer = this.draft.answer;
+      this.fileList = this.draft.files;
+    },
+    storageDraft() {
+      const realFileList = this.fileList.filter(item => utils.isFile(item));
+      const existFiles = this.fileList.filter(item => utils.isPureObject(item));
+      const formData = new SimpleFormData({
+        files: realFileList,
+        existFiles: JSON.stringify(existFiles),
+        answer: this.answer,
+      });
+      this.draftLoading = true;
+      updateHwDraft(this.classId, this.createDate, formData).then(() => {
+        this.draftLoading = false;
+        this.$message.success('保存成功');
+        this.$emit('fetchDataByDraft');
+      }).catch((error) => {
+        this.draftLoading = false;
+        this.$message.error(error);
+      });
+    },
   },
 };
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
+.submit-homework {
+  position: relative;
+}
+
+.draft-btns {
+  display: inline-block;
+  position: absolute;
+  right: 0;
+  top: -40px;
+}
 </style>

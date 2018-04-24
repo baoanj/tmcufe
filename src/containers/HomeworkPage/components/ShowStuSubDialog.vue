@@ -33,7 +33,7 @@
       </div>
       <br />
       <div class="submit-btn">
-        <el-button type="primary" @click="submitFeedback">提交</el-button>
+        <el-button type="primary" :loading="loading" @click="submitFeedback">提交</el-button>
       </div>
     </div>
   </fullscreen-dialog>
@@ -78,6 +78,7 @@ export default {
         feedback: '',
       },
       feedback: '',
+      loading: false,
     };
   },
   methods: {
@@ -97,20 +98,23 @@ export default {
       this.submission.feedback = row.feedback;
     },
     submitFeedback() {
+      this.loading = true;
       checkStuSub(
         this.classId,
         this.createDate,
         this.submission.userId,
         this.feedback,
       ).then(() => {
+        this.loading = false;
         this.visible = false;
         this.$emit('fetchData');
       }).catch((error) => {
+        this.loading = false;
         this.$message.error(error);
       });
     },
     formateDate(timestamp) {
-      return utils.formateDate(+timestamp);
+      return timestamp ? utils.formateDate(+timestamp) : '--';
     },
   },
 };

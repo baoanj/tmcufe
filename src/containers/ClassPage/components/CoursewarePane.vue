@@ -152,7 +152,7 @@ export default {
       }).catch(() => {});
     },
     formateDate(timestamp) {
-      return utils.formateDate(+timestamp);
+      return timestamp ? utils.formateDate(+timestamp) : '--';
     },
   },
 };

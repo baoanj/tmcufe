@@ -23,6 +23,7 @@
           <el-button
             class="submit-btn"
             type="primary"
+            :loading="loading"
             @click="submitForm('ruleForm')"
           >提交</el-button>
         </el-form-item>
@@ -69,6 +70,7 @@ export default {
       }
     };
     return {
+      loading: false,
       valid: true,
       invalidMsg: '',
       ruleForm: {
@@ -89,12 +91,15 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.loading = true;
           resetPass(this.$route.params.resetId, {
             password: this.ruleForm.password,
           }).then(() => {
+            this.loading = false;
             this.$message.success('重置成功，请登录');
             this.$router.push('/login');
           }).catch((error) => {
+            this.loading = false;
             this.$message.error(error);
           });
         }

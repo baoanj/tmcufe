@@ -34,6 +34,7 @@
         <el-button
           class="submit-btn"
           type="primary"
+          :loading="loading"
           @click="submitForm('ruleForm')"
         >提交</el-button>
       </el-form-item>
@@ -103,12 +104,14 @@ export default {
           { required: true, validator: validatePass, trigger: 'blur' },
         ],
       },
+      loading: false,
     };
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.loading = true;
           addClass({
             classId: this.ruleForm.classId,
             name: this.ruleForm.name,
@@ -116,9 +119,11 @@ export default {
             password: this.ruleForm.password,
             message: this.ruleForm.message,
           }).then(() => {
+            this.loading = false;
             this.$emit('hideDialog');
             this.$emit('fetchData');
           }).catch((error) => {
+            this.loading = false;
             this.$message.error(error);
           });
         }

@@ -25,6 +25,7 @@
           v-model="ruleForm.beginDate"
           type="datetime"
           placeholder="选择日期时间"
+          :picker-options="pickerOptions1"
         ></el-date-picker>
       </el-form-item>
       <el-form-item label="结束时间" prop="endDate">
@@ -32,7 +33,8 @@
           v-model="ruleForm.endDate"
           type="datetime"
           placeholder="选择日期时间"
-          :picker-options="pickerOptions"
+          default-time="23:59:59"
+          :picker-options="pickerOptions2"
         ></el-date-picker>
       </el-form-item>
       <div class="form-item-upload">
@@ -83,6 +85,23 @@ export default {
         callback();
       }
     };
+    const checkBeginDate = (rule, value, callback) => {
+      if (this.ruleForm.endDate && this.ruleForm.beginDate &&
+        this.ruleForm.endDate.getTime() < this.ruleForm.beginDate.getTime()) {
+        callback(new Error('开始时间不能晚于截止时间'));
+      } else {
+        callback();
+      }
+    };
+    const checkEndDate = (rule, value, callback) => {
+      if (this.ruleForm.beginDate && this.ruleForm.endDate &&
+        this.ruleForm.beginDate.getTime() > this.ruleForm.endDate.getTime()) {
+        callback(new Error('截止时间不能早于开始时间'));
+      } else {
+        callback();
+      }
+    };
+    const that = this;
     return {
       visible: false,
       loading: false,
@@ -97,37 +116,96 @@ export default {
         title: [
           { required: true, validator: checkTitle, trigger: 'blur' },
         ],
+        beginDate: [
+          { validator: checkBeginDate, trigger: 'blur' },
+        ],
+        endDate: [
+          { validator: checkEndDate, trigger: 'blur' },
+        ],
       },
-      pickerOptions: {
+      pickerOptions1: {
         shortcuts: [{
-          text: '三天后',
+          text: '明天',
           onClick(picker) {
             const date = new Date();
-            date.setTime(date.getTime() + (3600 * 1000 * 24 * 3));
+            const today = new Date(new Date().toLocaleDateString()).getTime();
+            date.setTime(today + (3600 * 1000 * 24 * 1));
             picker.$emit('pick', date);
           },
         }, {
-          text: '五天后',
+          text: '后天',
           onClick(picker) {
             const date = new Date();
-            date.setTime(date.getTime() + (3600 * 1000 * 24 * 5));
+            const today = new Date(new Date().toLocaleDateString()).getTime();
+            date.setTime(today + (3600 * 1000 * 24 * 2));
+            picker.$emit('pick', date);
+          },
+        }, {
+          text: '三天后',
+          onClick(picker) {
+            const date = new Date();
+            const today = new Date(new Date().toLocaleDateString()).getTime();
+            date.setTime(today + (3600 * 1000 * 24 * 3));
             picker.$emit('pick', date);
           },
         }, {
           text: '一周后',
           onClick(picker) {
             const date = new Date();
-            date.setTime(date.getTime() + (3600 * 1000 * 24 * 7));
+            const today = new Date(new Date().toLocaleDateString()).getTime();
+            date.setTime(today + (3600 * 1000 * 24 * 7));
+            picker.$emit('pick', date);
+          },
+        }],
+        disabledDate(date) {
+          if (that.ruleForm.endDate) {
+            return date.getTime() < new Date(new Date().toLocaleDateString()).getTime() ||
+              date.getTime() > new Date(that.ruleForm.endDate.toLocaleDateString()).getTime();
+          }
+          return date.getTime() < new Date(new Date().toLocaleDateString()).getTime();
+        },
+      },
+      pickerOptions2: {
+        shortcuts: [{
+          text: '三天后',
+          onClick(picker) {
+            const date = new Date();
+            const today = new Date(new Date().toLocaleDateString()).getTime() - 1;
+            date.setTime(today + (3600 * 1000 * 24 * 4));
+            picker.$emit('pick', date);
+          },
+        }, {
+          text: '五天后',
+          onClick(picker) {
+            const date = new Date();
+            const today = new Date(new Date().toLocaleDateString()).getTime() - 1;
+            date.setTime(today + (3600 * 1000 * 24 * 6));
+            picker.$emit('pick', date);
+          },
+        }, {
+          text: '一周后',
+          onClick(picker) {
+            const date = new Date();
+            const today = new Date(new Date().toLocaleDateString()).getTime() - 1;
+            date.setTime(today + (3600 * 1000 * 24 * 6));
             picker.$emit('pick', date);
           },
         }, {
           text: '两周后',
           onClick(picker) {
             const date = new Date();
-            date.setTime(date.getTime() + (3600 * 1000 * 24 * 14));
+            const today = new Date(new Date().toLocaleDateString()).getTime() - 1;
+            date.setTime(today + (3600 * 1000 * 24 * 15));
             picker.$emit('pick', date);
           },
         }],
+        disabledDate(date) {
+          if (that.ruleForm.beginDate) {
+            return date.getTime() <
+              new Date(that.ruleForm.beginDate.toLocaleDateString()).getTime();
+          }
+          return date.getTime() < new Date(new Date().toLocaleDateString()).getTime();
+        },
       },
     };
   },
@@ -136,8 +214,8 @@ export default {
       this.fileList = homework.files;
       this.ruleForm.title = homework.title;
       this.ruleForm.description = homework.description;
-      this.ruleForm.beginDate = new Date(+homework.beginDate);
-      this.ruleForm.endDate = new Date(+homework.endDate);
+      this.ruleForm.beginDate = homework.beginDate && new Date(+homework.beginDate);
+      this.ruleForm.endDate = homework.endDate && new Date(+homework.endDate);
       this.visible = true;
     },
     submitForm(formName) {
@@ -150,8 +228,8 @@ export default {
             existFiles: JSON.stringify(existFiles),
             title: this.ruleForm.title,
             description: this.ruleForm.description,
-            beginDate: this.ruleForm.beginDate.getTime(),
-            endDate: this.ruleForm.endDate.getTime(),
+            beginDate: this.ruleForm.beginDate ? this.ruleForm.beginDate.getTime() : '',
+            endDate: this.ruleForm.endDate ? this.ruleForm.endDate.getTime() : '',
           });
           this.loading = true;
           updateHomeworkMsg(this.classId, this.createDate, formData).then(() => {

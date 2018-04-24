@@ -5,7 +5,7 @@
         <top-header />
       </el-header>
       <el-main class="main-container">
-        <router-view/>
+        <router-view />
       </el-main>
     </el-container>
   </div>
@@ -41,5 +41,9 @@ export default {
   min-width: 600px;
   background-color: #eee;
   min-height: calc(100vh - 60px);
+}
+
+.page-loading {
+  position: absolute;
 }
 </style>

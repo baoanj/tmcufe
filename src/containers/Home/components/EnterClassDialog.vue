@@ -18,6 +18,7 @@
         <el-button
           class="submit-btn"
           type="primary"
+          :loading="loading"
           @click="submitForm('ruleForm')"
         >提交</el-button>
       </el-form-item>
@@ -68,19 +69,23 @@ export default {
           { validator: validatePass, trigger: 'blur' },
         ],
       },
+      loading: false,
     };
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.loading = true;
           enterClass({
             classId: this.ruleForm.classId,
             password: this.ruleForm.password,
           }).then(() => {
+            this.loading = false;
             this.$emit('hideDialog');
             this.$emit('fetchData');
           }).catch((error) => {
+            this.loading = false;
             this.$message.error(error);
           });
         }

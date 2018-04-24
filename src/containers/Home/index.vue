@@ -28,6 +28,7 @@
         <el-button
           v-if="moving"
           type="primary"
+          :loading="moveLoading"
           @click="submitMove"
         >提交移动</el-button>
         <span v-if="moving" class="move-note">拖动下方卡片即可移动</span>
@@ -96,6 +97,7 @@ export default {
       draggableOptions: {
         ghostClass: 'ghost-move',
       },
+      moveLoading: false,
     };
   },
   computed: {
@@ -159,10 +161,13 @@ export default {
       this.enterClassDialogVisible = true;
     },
     submitMove() {
+      this.moveLoading = true;
       submitMoveClasses({ classIds: this.moveClassIds }).then(() => {
+        this.moveLoading = false;
         this.fetchData();
         this.moving = false;
       }).catch((error) => {
+        this.moveLoading = false;
         this.$message.error(error);
       });
     },

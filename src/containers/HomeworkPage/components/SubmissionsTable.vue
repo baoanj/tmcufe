@@ -93,7 +93,7 @@ export default {
       return (row.checked && cellValue) || (row.checked && '无') || '--';
     },
     formateDate(timestamp) {
-      return utils.formateDate(+timestamp);
+      return timestamp ? utils.formateDate(+timestamp) : '--';
     },
   },
 };
