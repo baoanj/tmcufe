@@ -11,10 +11,11 @@ const state = {
     email: '',
     role: '',
   },
+  back: false,
 };
 
 const actions = {
-  refreshHeader: () => {
+  refreshHeader: () => new Promise((resolve) => {
     axios.get('/api/general/profile')
       .then((result) => {
         if (result.stats === 1) {
@@ -27,6 +28,7 @@ const actions = {
             role: '',
           };
         }
+        resolve();
       })
       .catch(() => {
         state.user = {
@@ -35,7 +37,14 @@ const actions = {
           email: '',
           role: '',
         };
+        resolve();
       });
+  }),
+  setBackTrue() {
+    state.back = true;
+  },
+  setBackFalse() {
+    state.back = false;
   },
 };
 

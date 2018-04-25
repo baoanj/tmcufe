@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="login-box">
     <vue-headful
-      title="高校教学管理系统 | 忘记密码"
+      :title="$route.meta.title"
     />
     <div v-if="success" class="success-msg">
       <span class="tmcu-text">邮件已发送到 {{ ruleForm.email }}</span>
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import utils from '@/utils';
 import { forgotPass, checkEmailExist, getCaptcha, checkCaptcha } from './api';
 
 export default {
@@ -49,7 +50,7 @@ export default {
     const checkEmail = (rule, value, callback) => {
       if (!value) {
         callback(new Error('必填'));
-      } else if (!/^[a-zA-Z0-9\-_]+@([a-zA-Z0-9]+\.)+[a-z]{2,4}$/.test(value)) {
+      } else if (!utils.validEmail(value)) {
         callback(new Error('邮箱格式有误'));
       } else {
         checkEmailExist(value).then(() => {
@@ -62,7 +63,7 @@ export default {
     const validateCaptcha = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入验证码'));
-      } else if (!/^[a-zA-Z0-9]{4}$/.test(value)) {
+      } else if (!utils.validCaptcha(value)) {
         callback(new Error('验证码格式错误'));
       } else {
         checkCaptcha(value).then(() => {
@@ -80,10 +81,10 @@ export default {
       },
       rules: {
         email: [
-          { validator: checkEmail, trigger: 'blur' },
+          { required: true, validator: checkEmail, trigger: 'blur' },
         ],
         captcha: [
-          { validator: validateCaptcha, trigger: 'blur' },
+          { required: true, validator: validateCaptcha, trigger: 'blur' },
         ],
       },
       captchaSVG: '',

@@ -1,7 +1,7 @@
 <template lang="html">
   <div>
     <vue-headful
-      title="高校教学管理系统 | 页面不存在"
+      :title="$route.meta.title"
     />
     <div class="owText">404</div>
   </div>

@@ -8,7 +8,7 @@
       label-width="100px"
     >
       <el-form-item label="班级Id" prop="classId">
-        <el-input v-model="ruleForm.classId" auto-complete="on"></el-input>
+        <el-input v-model="ruleForm.classId"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
         <el-input v-model="ruleForm.password"></el-input>
@@ -63,10 +63,10 @@ export default {
       },
       rules: {
         classId: [
-          { validator: checkClassId, trigger: 'blur' },
+          { required: true, validator: checkClassId, trigger: 'blur' },
         ],
         password: [
-          { validator: validatePass, trigger: 'blur' },
+          { required: true, validator: validatePass, trigger: 'blur' },
         ],
       },
       loading: false,

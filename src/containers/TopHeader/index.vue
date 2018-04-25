@@ -7,7 +7,7 @@
         </router-link>
       </el-col>
       <el-col :span="12">
-        <div v-if="$store.state.user.name" class="profile">
+        <div v-if="$store.state.user.email" class="profile">
           <span class="profile-msg">
             {{ $store.state.user.name }}
             {{ $store.state.user.role | roleFilter($store.state.user.stuId) }}
@@ -47,9 +47,6 @@ import EditProfileDialog from './components/EditProfileDialog';
 
 export default {
   name: 'TopHeader',
-  created() {
-    this.$store.dispatch('refreshHeader');
-  },
   components: {
     EditProfileDialog,
   },
@@ -62,8 +59,9 @@ export default {
     },
     logout() {
       uerLogout().then(() => {
-        this.$store.dispatch('refreshHeader');
-        this.$router.push('/login');
+        this.$store.dispatch('refreshHeader').then(() => {
+          this.$router.push('/login');
+        });
       }).catch((error) => {
         this.$message.error(error);
       });

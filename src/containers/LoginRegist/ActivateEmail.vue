@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="activate-mail">
     <vue-headful
-      title="高校教学管理系统 | 激活邮箱"
+      :title="$route.meta.title"
     />
     <el-button :loading="loading" type="primary" @click="activate">激活</el-button>
   </div>

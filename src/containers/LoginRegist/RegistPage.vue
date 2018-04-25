@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="regist-box">
     <vue-headful
-      title="高校教学管理系统 | 注册"
+      :title="$route.meta.title"
     />
     <div v-if="success" class="success-msg">
       <span class="tmcu-text">
@@ -30,7 +30,11 @@
           <el-input v-model="ruleForm.stuId" auto-complete="on"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input type="password" v-model="ruleForm.password" auto-complete="off"></el-input>
+          <el-input
+            type="password"
+            v-model="ruleForm.password"
+            placeholder="6-20个字符,数字/大小写字母/标点符号,不能有空格"
+          />
         </el-form-item>
         <el-form-item label="确认密码" prop="checkPass">
           <el-input type="password" v-model="ruleForm.checkPass" auto-complete="off"></el-input>
@@ -60,6 +64,7 @@
 </template>
 
 <script>
+import utils from '@/utils';
 import { registUser, checkEmailExist, getCaptcha, checkCaptcha, sendEmailAgain } from './api';
 
 export default {
@@ -71,7 +76,7 @@ export default {
     const checkEmail = (rule, value, callback) => {
       if (!value) {
         callback(new Error('必填'));
-      } else if (!/^[a-zA-Z0-9\-_]+@([a-zA-Z0-9]+\.)+[a-z]{2,4}$/.test(value)) {
+      } else if (!utils.validEmail(value)) {
         callback(new Error('邮箱格式有误'));
       } else {
         checkEmailExist(value).then(() => {
@@ -98,6 +103,8 @@ export default {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'));
+      } else if (!/^\S{6,20}$/.test(value)) {
+        callback(new Error('6-20个字符,支持数字/大小写字母/标点符号,不能有空格'));
       } else {
         if (this.ruleForm.checkPass !== '') {
           this.$refs.ruleForm.validateField('checkPass');
@@ -139,22 +146,22 @@ export default {
       },
       rules: {
         email: [
-          { validator: checkEmail, trigger: 'blur' },
+          { required: true, validator: checkEmail, trigger: 'blur' },
         ],
         name: [
-          { validator: checkName, trigger: 'blur' },
+          { required: true, validator: checkName, trigger: 'blur' },
         ],
         stuId: [
-          { validator: checkStuId, trigger: 'blur' },
+          { required: true, validator: checkStuId, trigger: 'blur' },
         ],
         password: [
-          { validator: validatePass, trigger: 'blur' },
+          { required: true, validator: validatePass, trigger: 'blur' },
         ],
         checkPass: [
-          { validator: validatePass2, trigger: 'blur' },
+          { required: true, validator: validatePass2, trigger: 'blur' },
         ],
         captcha: [
-          { validator: validateCaptcha, trigger: 'blur' },
+          { required: true, validator: validateCaptcha, trigger: 'blur' },
         ],
       },
       captchaSVG: '',

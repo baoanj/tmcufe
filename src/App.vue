@@ -5,7 +5,12 @@
         <top-header />
       </el-header>
       <el-main class="main-container">
-        <router-view />
+        <transition
+          :enter-active-class="$store.state.back ?
+          'animated slideInLeft' : 'animated slideInRight'"
+        >
+          <router-view />
+        </transition>
       </el-main>
     </el-container>
   </div>
@@ -41,9 +46,45 @@ export default {
   min-width: 600px;
   background-color: #eee;
   min-height: calc(100vh - 60px);
+  overflow: hidden;
 }
 
 .page-loading {
   position: absolute;
+}
+
+.animated {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translate3d(-100%, 0, 0);
+    visibility: visible;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.slideInLeft {
+  animation-name: slideInLeft;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translate3d(100%, 0, 0);
+    visibility: visible;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.slideInRight {
+  animation-name: slideInRight;
 }
 </style>

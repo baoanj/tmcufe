@@ -12,7 +12,19 @@
       label-width="100px"
     >
       <el-form-item label="作业标题" prop="title">
-        <el-input v-model="ruleForm.title"></el-input>
+        <el-row>
+          <el-col :span="22">
+            <el-input
+              v-model="ruleForm.title"
+              placeholder="50字以内"
+              :clearable="true"
+              :maxlength="50"
+            />
+          </el-col>
+          <el-col :span="2">
+            <span style="padding-left: 5px">{{ruleForm.title.length}}/50</span>
+          </el-col>
+        </el-row>
       </el-form-item>
       <el-form-item label="作业详情" prop="description">
         <markdown-editor

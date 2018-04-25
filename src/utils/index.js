@@ -60,8 +60,13 @@ export default {
   },
 
   validEmail(email) {
-    const pattern = /^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]+$/; // eslint-disable-line
+    const pattern = /^[a-zA-Z0-9.+_-]+@([a-zA-Z0-9_-]+\.)+[a-zA-Z]{2,4}$/; // eslint-disable-line
     return pattern.test(email);
+  },
+
+  validCaptcha(captcha) {
+    const pattern = /^[a-zA-Z0-9]{4}$/; // eslint-disable-line
+    return pattern.test(captcha);
   },
 
   validPhone(phone) {

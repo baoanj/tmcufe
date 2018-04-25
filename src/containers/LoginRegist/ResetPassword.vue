@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="reset-box">
     <vue-headful
-      title="高校教学管理系统 | 重置密码"
+      :title="$route.meta.title"
     />
     <div v-if="valid">
       <p class="reset-title">重置密码</p>
@@ -12,11 +12,15 @@
         ref="ruleForm"
         label-width="100px"
       >
-        <el-form-item label="密码" prop="password">
-          <el-input type="password" v-model="ruleForm.password" auto-complete="off"></el-input>
+        <el-form-item label="新密码" prop="password">
+          <el-input
+            type="password"
+            v-model="ruleForm.password"
+            placeholder="6-20个字符，支持数字,大小写字母和标点符号,不能有空格"
+          />
         </el-form-item>
-        <el-form-item label="确认密码" prop="checkPass">
-          <el-input type="password" v-model="ruleForm.checkPass" auto-complete="off"></el-input>
+        <el-form-item label="确认新密码" prop="checkPass">
+          <el-input type="password" v-model="ruleForm.checkPass"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -52,7 +56,9 @@ export default {
   data() {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入密码'));
+        callback(new Error('请输入新密码'));
+      } else if (!/^\S{6,20}$/.test(value)) {
+        callback(new Error('6-20个字符，支持数字/大小写字母/标点符号,不能有空格'));
       } else {
         if (this.ruleForm.checkPass !== '') {
           this.$refs.ruleForm.validateField('checkPass');
@@ -79,10 +85,10 @@ export default {
       },
       rules: {
         password: [
-          { validator: validatePass, trigger: 'blur' },
+          { required: true, validator: validatePass, trigger: 'blur' },
         ],
         checkPass: [
-          { validator: validatePass2, trigger: 'blur' },
+          { required: true, validator: validatePass2, trigger: 'blur' },
         ],
       },
     };

@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="login-box">
     <vue-headful
-      title="高校教学管理系统 | 登录"
+      :title="$route.meta.title"
     />
     <p class="login-title">用户登录</p>
     <el-form
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import utils from '@/utils';
 import { loginUser, checkEmailExist, getCaptcha, checkCaptcha, sendEmailAgain } from './api';
 
 export default {
@@ -56,8 +57,8 @@ export default {
   data() {
     const checkEmail = (rule, value, callback) => {
       if (!value) {
-        callback(new Error('必填'));
-      } else if (!/^[a-zA-Z0-9\-_]+@([a-zA-Z0-9]+\.)+[a-z]{2,4}$/.test(value)) {
+        callback(new Error('请输入邮箱'));
+      } else if (!utils.validEmail(value)) {
         callback(new Error('邮箱格式有误'));
       } else {
         checkEmailExist(value).then(() => {
@@ -77,7 +78,7 @@ export default {
     const validateCaptcha = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入验证码'));
-      } else if (!/^[a-zA-Z0-9]{4}$/.test(value)) {
+      } else if (!utils.validCaptcha(value)) {
         callback(new Error('验证码格式错误'));
       } else {
         checkCaptcha(value).then(() => {
@@ -95,13 +96,13 @@ export default {
       },
       rules: {
         email: [
-          { validator: checkEmail, trigger: 'blur' },
+          { required: true, validator: checkEmail, trigger: 'blur' },
         ],
         password: [
-          { validator: validatePass, trigger: 'blur' },
+          { required: true, validator: validatePass, trigger: 'blur' },
         ],
         captcha: [
-          { validator: validateCaptcha, trigger: 'blur' },
+          { required: true, validator: validateCaptcha, trigger: 'blur' },
         ],
       },
       captchaSVG: '',
@@ -121,8 +122,9 @@ export default {
             captcha: this.ruleForm.captcha,
           }).then(() => {
             this.loading = false;
-            this.$store.dispatch('refreshHeader');
-            this.$router.push('/');
+            this.$store.dispatch('refreshHeader').then(() => {
+              this.$router.go(-1);
+            });
           }).catch((error) => {
             this.loading = false;
             if (error === '邮箱未激活') {

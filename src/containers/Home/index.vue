@@ -1,76 +1,79 @@
 <template lang="html">
-  <div v-if="$store.state.user.name">
+  <div>
     <vue-headful
-      title="高校教学管理系统"
+      :title="$route.meta.title"
     />
-    <div class="home-operate-container">
-      <div class="home-operate-content">
-        <el-button
-          v-if="$store.state.user.role === 'teacher'"
-          type="primary"
-          @click="addClass"
-        >新建班级</el-button>
-        <el-button
-          v-if="$store.state.user.role === 'student'"
-          type="primary"
-          @click="enterClass"
-        >添加班级</el-button>
-        <el-button
-          v-if="!moving"
-          type="primary"
-          @click="moving = true"
-        >移动班级</el-button>
-        <el-button
-          v-if="moving"
-          type="primary"
-          @click="cancelMove"
-        >放弃移动</el-button>
-        <el-button
-          v-if="moving"
-          type="primary"
-          :loading="moveLoading"
-          @click="submitMove"
-        >提交移动</el-button>
-        <span v-if="moving" class="move-note">拖动下方卡片即可移动</span>
+    <page-loading v-if="loading || error" :loading="loading" :error="error" />
+    <div v-if="!loading && !error && $store.state.user.email">
+      <div class="home-operate-container">
+        <div class="home-operate-content">
+          <el-button
+            v-if="$store.state.user.role === 'teacher'"
+            type="primary"
+            @click="addClass"
+          >新建班级</el-button>
+          <el-button
+            v-if="$store.state.user.role === 'student'"
+            type="primary"
+            @click="enterClass"
+          >添加班级</el-button>
+          <el-button
+            v-if="!moving"
+            type="primary"
+            @click="moving = true"
+          >移动班级</el-button>
+          <el-button
+            v-if="moving"
+            type="primary"
+            @click="cancelMove"
+          >放弃移动</el-button>
+          <el-button
+            v-if="moving"
+            type="primary"
+            :loading="moveLoading"
+            @click="submitMove"
+          >提交移动</el-button>
+          <span v-if="moving" class="move-note">拖动下方卡片即可移动</span>
+        </div>
       </div>
-    </div>
-    <div v-if="moving">
-      <vue-draggable :options="draggableOptions" v-model="sortableMoveClasses">
-        <transition-group>
-          <class-card
-            v-for="classs in sortableMoveClasses"
-            :key="classs.classId"
-            :classs="classs"
-            :move="moving"
-          />
-        </transition-group>
-      </vue-draggable>
-    </div>
-    <div v-else>
-      <class-card
-        v-for="classs in sortableClasses"
-        :key="classs.classId"
-        :classs="classs"
-        :move="moving"
+      <div v-if="moving">
+        <vue-draggable :options="draggableOptions" v-model="sortableMoveClasses">
+          <transition-group>
+            <class-card
+              v-for="classs in sortableMoveClasses"
+              :key="classs.classId"
+              :classs="classs"
+              :move="moving"
+            />
+          </transition-group>
+        </vue-draggable>
+      </div>
+      <div v-else>
+        <class-card
+          v-for="classs in sortableClasses"
+          :key="classs.classId"
+          :classs="classs"
+          :move="moving"
+        />
+      </div>
+      <add-class-dialog
+        v-if="$store.state.user.role === 'teacher'"
+        :dialogVisible="addClassDialogVisible"
+        @hideDialog="addClassDialogVisible = false"
+        @fetchData="fetchData"
+      />
+      <enter-class-dialog
+        v-if="$store.state.user.role === 'student'"
+        :dialogVisible="enterClassDialogVisible"
+        @hideDialog="enterClassDialogVisible = false"
+        @fetchData="fetchData"
       />
     </div>
-    <add-class-dialog
-      v-if="$store.state.user.role === 'teacher'"
-      :dialogVisible="addClassDialogVisible"
-      @hideDialog="addClassDialogVisible = false"
-      @fetchData="fetchData"
-    />
-    <enter-class-dialog
-      v-if="$store.state.user.role === 'student'"
-      :dialogVisible="enterClassDialogVisible"
-      @hideDialog="enterClassDialogVisible = false"
-      @fetchData="fetchData"
-    />
   </div>
-  <div v-else class="default-home"></div>
 </template>
 
 <script>
+import PageLoading from '@/components/PageLoading';
 import { getClasses, submitMoveClasses } from './api';
 import ClassCard from './components/ClassCard';
 import AddClassDialog from './components/AddClassDialog';
@@ -82,8 +85,10 @@ export default {
     ClassCard,
     AddClassDialog,
     EnterClassDialog,
+    PageLoading,
   },
   created() {
+    this.$store.dispatch('setBackFalse');
     this.fetchData();
   },
   data() {
@@ -98,6 +103,8 @@ export default {
         ghostClass: 'ghost-move',
       },
       moveLoading: false,
+      loading: false,
+      error: false,
     };
   },
   computed: {
@@ -146,11 +153,16 @@ export default {
   },
   methods: {
     fetchData() {
+      this.loading = true;
+      this.error = false;
       getClasses().then((data) => {
+        this.loading = false;
         this.classes = data.classes;
         this.classIds = data.classIds;
         this.moveClassIds = data.classIds;
       }).catch((error) => {
+        this.loading = false;
+        this.error = true;
         this.$message.error(error);
       });
     },

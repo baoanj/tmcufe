@@ -14,11 +14,26 @@
       <el-form-item label="班级Id">
         <p>{{ classId }}</p>
       </el-form-item>
-      <el-form-item label="班级名称" prop="name">
-        <el-input v-model="ruleForm.name" auto-complete="on"></el-input>
-      </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model="ruleForm.password"></el-input>
+        <el-input
+          v-model="ruleForm.password"
+          :maxlength="20"
+          placeholder="公开给班里学生，6-20个字符"
+        />
+      </el-form-item>
+      <el-form-item label="班级名称" prop="name">
+        <el-row>
+          <el-col :span="20">
+            <el-input
+              v-model="ruleForm.name"
+              placeholder="30字以内"
+              :clearable="true"
+              :maxlength="30"></el-input>
+          </el-col>
+          <el-col :span="4">
+            <span style="padding-left: 5px">{{ruleForm.name.length}}/30</span>
+          </el-col>
+        </el-row>
       </el-form-item>
       <el-form-item label="其他信息" prop="message">
         <markdown-editor
@@ -64,6 +79,8 @@ export default {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'));
+      } else if (value.length < 6) {
+        callback(new Error('6-20个字符'));
       } else {
         callback();
       }
