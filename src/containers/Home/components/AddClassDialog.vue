@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import utils from '@/utils';
 import MarkdownEditor from '@/components/MarkdownEditor';
 import FullscreenDialog from '@/components/FullscreenDialog';
 import { addClass, checkClassIdUnique } from '../api';
@@ -82,7 +83,7 @@ export default {
     const checkClassId = (rule, value, callback) => {
       if (!value) {
         callback(new Error('必填'));
-      } else if (value.length < 6) {
+      } else if (!utils.validClassId(value)) {
         callback(new Error('6-20个字符'));
       } else {
         checkClassIdUnique(value).then(() => {
@@ -102,7 +103,7 @@ export default {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('必填'));
-      } else if (value.length < 6) {
+      } else if (!utils.validClassPass(value)) {
         callback(new Error('6-20个字符'));
       } else {
         callback();

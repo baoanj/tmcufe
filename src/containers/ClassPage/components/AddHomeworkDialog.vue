@@ -226,7 +226,6 @@ export default {
         if (valid) {
           const formData = new SimpleFormData({
             files: this.fileList,
-            createDate: Date.now(),
             title: this.ruleForm.title,
             description: this.ruleForm.description,
             beginDate: this.ruleForm.beginDate ? this.ruleForm.beginDate.getTime() : '',

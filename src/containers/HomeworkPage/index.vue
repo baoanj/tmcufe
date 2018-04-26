@@ -141,7 +141,6 @@ import EditHomeworkDialog from './components/EditHomeworkDialog';
 export default {
   name: 'HomeworkPage',
   created() {
-    this.$store.dispatch('setBackFalse');
     this.fetchData();
   },
   components: {
@@ -246,7 +245,6 @@ export default {
       this.$refs.editHomeworkDialogRef.show(this.homework);
     },
     backClassPage() {
-      this.$store.dispatch('setBackTrue');
       this.$router.push(`/class/${this.$route.params.classId}`);
     },
   },

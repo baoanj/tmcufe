@@ -11,7 +11,6 @@ const state = {
     email: '',
     role: '',
   },
-  back: false,
 };
 
 const actions = {
@@ -40,12 +39,6 @@ const actions = {
         resolve();
       });
   }),
-  setBackTrue() {
-    state.back = true;
-  },
-  setBackFalse() {
-    state.back = false;
-  },
 };
 
 export default new Vuex.Store({

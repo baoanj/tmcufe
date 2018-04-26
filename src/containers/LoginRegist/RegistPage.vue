@@ -103,7 +103,7 @@ export default {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'));
-      } else if (!/^\S{6,20}$/.test(value)) {
+      } else if (!utils.validPassword2(value)) {
         callback(new Error('6-20个字符,支持数字/大小写字母/标点符号,不能有空格'));
       } else {
         if (this.ruleForm.checkPass !== '') {

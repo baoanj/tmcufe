@@ -78,4 +78,29 @@ export default {
     const pattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[a-zA-Z0-9^\S]{6,32}$/;
     return pattern.test(pwd);
   },
+
+  validPassword2(pwd) {
+    const pattern = /^\S{6,20}$/;
+    return pattern.test(pwd);
+  },
+
+  validClassId(classId) {
+    const pattern = /^.{6,20}$/;
+    return pattern.test(classId);
+  },
+
+  validClassPass(pass) {
+    const pattern = /^.{6,20}$/;
+    return pattern.test(pass);
+  },
+
+  validClassName(name) {
+    const pattern = /^.{1,30}$/;
+    return pattern.test(name);
+  },
+
+  validHwTitle(title) {
+    const pattern = /^.{1,50}$/;
+    return pattern.test(title);
+  },
 };

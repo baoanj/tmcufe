@@ -5,10 +5,7 @@
         <top-header />
       </el-header>
       <el-main class="main-container">
-        <transition
-          :enter-active-class="$store.state.back ?
-          'animated slideInLeft' : 'animated slideInRight'"
-        >
+        <transition :enter-active-class="enterActiveClass">
           <router-view />
         </transition>
       </el-main>
@@ -24,6 +21,23 @@ export default {
   name: 'App',
   components: {
     TopHeader,
+  },
+  data() {
+    return {
+      enterActiveClass: 'animated slideInRight',
+    };
+  },
+  watch: {
+    $route(to, from) {
+      if (!this.$router.prePages) this.$router.prePages = [];
+      if (to.name === this.$router.prePages[this.$router.prePages.length - 1]) {
+        this.enterActiveClass = 'animated slideInLeft';
+        this.$router.prePages.pop();
+      } else {
+        this.enterActiveClass = 'animated slideInRight';
+        this.$router.prePages.push(from.name);
+      }
+    },
   },
 };
 </script>

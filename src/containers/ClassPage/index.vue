@@ -116,7 +116,6 @@ import ClassTasDialog from './components/ClassTasDialog';
 export default {
   name: 'ClassPage',
   created() {
-    this.$store.dispatch('setBackFalse');
     this.fetchData();
   },
   components: {
@@ -196,7 +195,6 @@ export default {
       this.$refs.classTasDialogRef.show(this.classs.tas);
     },
     backHome() {
-      this.$store.dispatch('setBackTrue');
       this.$router.push('/');
     },
   },

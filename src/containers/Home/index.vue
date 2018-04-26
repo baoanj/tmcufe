@@ -88,7 +88,6 @@ export default {
     PageLoading,
   },
   created() {
-    this.$store.dispatch('setBackFalse');
     this.fetchData();
   },
   data() {

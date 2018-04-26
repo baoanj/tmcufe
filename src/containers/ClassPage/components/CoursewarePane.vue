@@ -9,7 +9,7 @@
             v-for="courseware in reverseCoursewares"
           >
             <div>
-              <span class="courseware-title">{{ courseware.title }}</span>
+              <span class="courseware-title">{{ courseware.title || '无标题' }}</span>
               <span v-if="$store.state.user.role === 'teacher'">
                 <span class="tmcu-btn" @click="editCourseware(courseware)">编辑</span>
                 <span class="tmcu-btn" @click="deleteCourseware(courseware)">删除</span>
@@ -23,7 +23,7 @@
       <el-col :span="12">
         <div class="edit-courseware" v-if="$store.state.user.role === 'teacher'">
           <p class="courseware-title">
-            {{ editingCourseware ? `编辑课件-${editingCourseware.title}` : '新增课件'}}
+            {{ editingCourseware ? `编辑课件-${editingCourseware.title || '无标题'}` : '新增课件'}}
           </p>
           <el-input class="edit-title" placeholder="标题(可选)" v-model="title"></el-input>
           <upload-files :files="fileList" @change="val => fileList = val" />
@@ -97,7 +97,6 @@ export default {
         files: realFileList,
         existFiles: JSON.stringify(existFiles),
         title: this.title,
-        uploadDate: Date.now(),
       });
       uploadCourseware(this.classId, formData).then(() => {
         this.$emit('fetchData');

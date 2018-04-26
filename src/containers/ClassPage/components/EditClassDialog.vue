@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import utils from '@/utils';
 import MarkdownEditor from '@/components/MarkdownEditor';
 import FullscreenDialog from '@/components/FullscreenDialog';
 import { updateClassMsg } from '../api';
@@ -79,7 +80,7 @@ export default {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'));
-      } else if (value.length < 6) {
+      } else if (!utils.validClassPass(value)) {
         callback(new Error('6-20个字符'));
       } else {
         callback();

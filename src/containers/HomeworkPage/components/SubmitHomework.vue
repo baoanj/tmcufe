@@ -89,7 +89,6 @@ export default {
       const formData = new SimpleFormData({
         files: this.fileList,
         answer: this.answer,
-        date: Date.now(),
       });
       this.loading = true;
       submitHw(this.classId, this.createDate, formData)
@@ -109,7 +108,6 @@ export default {
         files: realFileList,
         existFiles: JSON.stringify(existFiles),
         answer: this.answer,
-        date: Date.now(),
       });
       this.loading = true;
       updateAnswerApi(this.classId, this.createDate, formData)
