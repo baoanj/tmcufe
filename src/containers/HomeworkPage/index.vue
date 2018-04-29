@@ -8,10 +8,14 @@
       <div class="hw-box">
         <div class="custom-card">
           <p>
-            <span class="card-text-btn" @click="backClassPage">
-              <i class="el-icon-arrow-left"></i>
-              <span>回班级主页</span>
-            </span>
+            <breadcrumb
+              class="breadcrumb"
+              :paths="[
+                { name: '主页', to: '/' },
+                { name: '班级', to: `/class/${$route.params.classId}` },
+                { name: '作业' },
+              ]"
+            />
             <span class="hw-title">{{ homework.title }}</span>
             <span :class="`hw-stauts-${expired}`">{{ expired | hwStatus }}</span>
             <span v-if="$store.state.user.role === 'teacher'">
@@ -131,6 +135,7 @@
 import MarkdownEditor from '@/components/MarkdownEditor';
 import FileList from '@/components/FileList';
 import PageLoading from '@/components/PageLoading';
+import Breadcrumb from '@/components/Breadcrumb';
 import utils from '@/utils';
 import { getHwSubsData, deleteHwSubApi } from './api';
 import SubmissionsTable from './components/SubmissionsTable';
@@ -151,6 +156,7 @@ export default {
     HwAnswerDialog,
     EditHomeworkDialog,
     PageLoading,
+    Breadcrumb,
   },
   computed: {
     expired() {
@@ -244,9 +250,6 @@ export default {
     showEditHomeworkDialog() {
       this.$refs.editHomeworkDialogRef.show(this.homework);
     },
-    backClassPage() {
-      this.$router.push(`/class/${this.$route.params.classId}`);
-    },
   },
   filters: {
     hwStatus(val) {
@@ -281,18 +284,8 @@ export default {
   text-align: center;
 }
 
-.card-text-btn {
+.breadcrumb {
   float: left;
-  font-size: 14px;
-  text-decoration: none;
-  color: #409eff;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.card-text-btn:hover {
-  color: #66b1ff;
 }
 
 .hw-box {

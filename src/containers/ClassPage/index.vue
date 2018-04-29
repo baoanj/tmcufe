@@ -8,10 +8,7 @@
       <div>
         <div class="custom-card">
           <div>
-            <span class="card-text-btn" @click="backHome">
-              <i class="el-icon-arrow-left"></i>
-              <span>回主页</span>
-            </span>
+            <breadcrumb class="breadcrumb" :paths="[{name: '主页', to: '/'}, {name: '班级'}]"/>
             <span class="class-name">{{ classs.name }}</span>
             <span v-if="$store.state.user.role === 'teacher'">
               <el-button class="el-text-btn" type="text" @click="showEditClassDialog()">
@@ -103,6 +100,7 @@
 <script>
 import MarkdownEditor from '@/components/MarkdownEditor';
 import PageLoading from '@/components/PageLoading';
+import Breadcrumb from '@/components/Breadcrumb';
 import { getClassHwsData } from './api';
 import AddHomeworkDialog from './components/AddHomeworkDialog';
 import HomeworkItem from './components/HomeworkItem';
@@ -129,6 +127,7 @@ export default {
     ViewStuSubsDialog,
     ClassTasDialog,
     PageLoading,
+    Breadcrumb,
   },
   data() {
     return {
@@ -194,9 +193,6 @@ export default {
     showClassTasDialog() {
       this.$refs.classTasDialogRef.show(this.classs.tas);
     },
-    backHome() {
-      this.$router.push('/');
-    },
   },
   filters: {
     taStatus(role, length) {
@@ -223,18 +219,8 @@ export default {
   text-align: center;
 }
 
-.card-text-btn {
+.breadcrumb {
   float: left;
-  font-size: 14px;
-  text-decoration: none;
-  color: #409eff;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.card-text-btn:hover {
-  color: #66b1ff;
 }
 
 .class-name {

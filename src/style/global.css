@@ -7,6 +7,7 @@
   color: #409eff;
   font-size: 14px;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .tmcu-btn:hover {
