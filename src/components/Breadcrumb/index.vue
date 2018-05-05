@@ -23,18 +23,18 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .breadcrumb-item {
   display: inline-block;
   line-height: 16px;
-}
 
-.breadcrumb-item > span {
-  float: left;
-}
+  span {
+    float: left;
+  }
 
-.separator {
-  color: #c0c4cc;
-  margin: 0 2px;
+  .separator {
+    color: #c0c4cc;
+    margin: 0 2px;
+  }
 }
 </style>

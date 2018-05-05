@@ -47,7 +47,7 @@
         />
         <br />
         <div>
-          <upload-files :files="fileList" @change="val => fileList = val" />
+          <upload-files v-model="fileList" />
         </div>
       </div>
     </div>

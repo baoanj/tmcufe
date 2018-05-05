@@ -13,7 +13,7 @@
       @change="(val) => answer = val"
     />
     <br />
-    <upload-files :files="fileList" @change="val => fileList = val" />
+    <upload-files v-model="fileList" />
       <br />
     <div class="submit-btn">
       <el-button @click="resetAnswer">清空</el-button>

@@ -190,7 +190,7 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .ghost-move {
   opacity: 0.5;
 }
@@ -210,13 +210,13 @@ export default {
 
 .move-note {
   padding-left: 10px;
-  font-size: 14px;
-  color: #606266;
+  font-size: $tmcu-font-size;
+  color: $tmcu-text-color;
 }
 
 .default-home {
   width: 100%;
-  height: calc(100vh - 100px);
+  height: calc(100vh - $header-height - $main-padding * 2);
   background-image: url('/static/logo.png');
   background-position: center;
   background-repeat: no-repeat;

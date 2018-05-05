@@ -103,14 +103,13 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .mail-btn {
-  color: #409eff;
-  font-size: 14px;
+  color: $tmcu-primary-color;
+  font-size: $tmcu-font-size;
   text-decoration: none;
-}
-
-.mail-btn:hover {
-  color: #66b1ff;
+  &:hover {
+    color: $tmcu-primary-hover-color;
+  }
 }
 </style>

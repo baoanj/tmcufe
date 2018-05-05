@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container>
-      <el-header :class="headerClass">
+      <el-header :class="headerClass" height="60px">
         <top-header />
       </el-header>
       <el-main class="main-container">
@@ -18,7 +18,7 @@
 
 <script>
 import TopHeader from './containers/TopHeader';
-import './style/global.css';
+import './style/global.scss';
 
 export default {
   name: 'App',
@@ -79,33 +79,36 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+$app-background-color: #fff;
+$container-background-color: #eee;
+$app-min-width: 600px;
+$back-top-size: 40px;
+
 .top-header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  min-width: 600px;
+  min-width: $app-min-width;
   box-shadow: 0 0 20px #9da5ab;
-  background-color: #fff;
-  line-height: 60px;
+  background-color: $app-background-color;
+  line-height: $header-height;
   z-index: 3;
   transition: all 0.5s;
-}
-
-.top-header-gone {
-  top: -80px;
-}
-
-.top-header-back {
-  top: 0;
+  &-gone {
+    top: -80px;
+  }
+  &-back {
+    top: 0;
+  }
 }
 
 .main-container {
-  margin-top: 60px;
-  min-width: 600px;
-  background-color: #eee;
-  min-height: calc(100vh - 60px);
+  margin-top: $header-height;
+  min-width: $app-min-width;
+  background-color: $container-background-color;
+  min-height: calc(100vh - $header-height);
   overflow: hidden;
 }
 
@@ -149,22 +152,21 @@ export default {
 }
 
 .scroll-top {
-  width: 40px;
-  height: 40px;
+  width: $back-top-size;
+  height: $back-top-size;
   position: fixed;
   right: 20px;
   bottom: 30px;
-  background-color: #fff;
+  background-color: $app-background-color;
   border-radius: 50%;
   text-align: center;
-  line-height: 40px;
+  line-height: $back-top-size;
   cursor: pointer;
   font-size: 18px;
   box-shadow: 2px 2px 6px rgba(0,0,0,.12);
   z-index: 5;
-}
-
-.scroll-top:hover {
-  box-shadow: 2px 2px 6px rgba(0,0,0,.22);
+  &:hover {
+    box-shadow: 2px 2px 6px rgba(0,0,0,.22);
+  }
 }
 </style>

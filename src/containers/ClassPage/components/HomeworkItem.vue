@@ -111,48 +111,19 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
-.box-card-1 {
-  float: left;
-  padding: 10px;
-}
-
-@media only screen and (max-width: 699px) {
-  .box-card-2 {
-    width: 100%;
-  }
-}
-@media only screen and (min-width: 700px) and (max-width: 1049px) {
-  .box-card-2 {
-    width: 50%;
-  }
-}
-@media only screen and (min-width: 1050px) and (max-width: 1399px) {
-  .box-card-2 {
-    width: 33.33%;
-  }
-}
-@media only screen and (min-width: 1400px) and (max-width: 1749px) {
-  .box-card-2 {
-    width: 25%;
-  }
-}
-@media only screen and (min-width: 1750px) {
-  .box-card-2 {
-    width: 20%;
-  }
-}
+<style lang="scss" scoped>
+@import '../../../style/box-card-media';
 
 .card-text-btn {
   display: inline-block;
   text-decoration: none;
-  color: #409eff;
+  color: $tmcu-primary-color;
   white-space: nowrap;
   transition: all 0.2s;
 }
 
 .card-text-btn:hover {
-  color: #66b1ff;
+  color: $tmcu-primary-hover-color;
 }
 
 .el-form-item--small.el-form-item {
@@ -175,16 +146,5 @@ export default {
   position: absolute;
   right: 5px;
   top: 2px;
-}
-</style>
-
-<style lang="css">
-.box-card-1 .el-card__header {
-  position: relative;
-  padding: 10px 50px 10px 10px;
-}
-
-.box-card-1 .el-card__body {
-  position: relative;
 }
 </style>

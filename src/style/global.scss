@@ -1,0 +1,32 @@
+$tmcu-primary-color: #409eff;
+$tmcu-primary-hover-color: #66b1ff;
+$tmcu-text-color: #606266;
+$tmcu-font-size: 14px;
+
+.tmcu-text {
+  color: $tmcu-text-color;
+  font-size: $tmcu-font-size;
+}
+
+.tmcu-btn {
+  color: $tmcu-primary-color;
+  font-size: $tmcu-font-size;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+
+  &:hover {
+    color: $tmcu-primary-hover-color;
+  }
+}
+
+.box-card-1 {
+  .el-card__header {
+    position: relative;
+    padding: 10px 50px 10px 10px;
+  }
+
+  .el-card__body {
+    position: relative;
+  }
+}

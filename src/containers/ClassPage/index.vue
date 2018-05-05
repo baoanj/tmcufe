@@ -207,7 +207,7 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .custom-card {
   background-color: #fff;
   box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
@@ -224,7 +224,7 @@ export default {
 }
 
 .class-name {
-  color: #606266;
+  color: $tmcu-text-color;
   font-size: 20px;
   font-weight: bold;
 }
@@ -252,7 +252,7 @@ export default {
 
 .hw-total {
   color: #606266;
-  font-size: 14px;
+  font-size: $tmcu-font-size;
   margin-right: 20px;
 }
 

@@ -1,0 +1,30 @@
+.box-card-1 {
+  float: left;
+  padding: 10px;
+}
+
+@media only screen and (max-width: 699px) {
+  .box-card-2 {
+    width: 100%;
+  }
+}
+@media only screen and (min-width: 700px) and (max-width: 1049px) {
+  .box-card-2 {
+    width: 50%;
+  }
+}
+@media only screen and (min-width: 1050px) and (max-width: 1399px) {
+  .box-card-2 {
+    width: 33.33%;
+  }
+}
+@media only screen and (min-width: 1400px) and (max-width: 1749px) {
+  .box-card-2 {
+    width: 25%;
+  }
+}
+@media only screen and (min-width: 1750px) {
+  .box-card-2 {
+    width: 20%;
+  }
+}

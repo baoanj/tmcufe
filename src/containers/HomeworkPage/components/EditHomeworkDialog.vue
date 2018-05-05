@@ -50,7 +50,7 @@
         ></el-date-picker>
       </el-form-item>
       <div class="form-item-upload">
-        <upload-files :files="fileList" @change="val => fileList = val" />
+        <upload-files v-model="fileList" />
       </div>
       <el-form-item>
         <el-button @click="closeDialog">取消</el-button>

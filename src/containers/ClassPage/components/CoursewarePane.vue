@@ -26,7 +26,7 @@
             {{ editingCourseware ? `编辑课件-${editingCourseware.title || '无标题'}` : '新增课件'}}
           </p>
           <el-input class="edit-title" placeholder="标题(可选)" v-model="title"></el-input>
-          <upload-files :files="fileList" @change="val => fileList = val" />
+          <upload-files v-model="fileList" />
           <div class="edit-courseware-btn" v-if="editingCourseware">
             <el-button :loading="loading" @click="updateCourseware">提交修改</el-button>
             <el-button @click="quitEditCourseware">放弃修改，新增课件</el-button>

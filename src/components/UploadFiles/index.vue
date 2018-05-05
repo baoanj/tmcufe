@@ -29,6 +29,10 @@
 <script>
 export default {
   name: 'UploadFiles',
+  model: {
+    prop: 'files',
+    event: 'change',
+  },
   props: {
     files: {
       type: Array,
@@ -37,23 +41,10 @@ export default {
       },
     },
   },
-  data() {
-    return {
-      fileList: this.files,
-    };
-  },
-  watch: {
-    fileList(newVal) {
-      this.$emit('change', newVal);
-    },
-    files(newVal) {
-      this.fileList = newVal;
-    },
-  },
   methods: {
     customUpload({ file }) {
-      for (let i = 0; i < this.fileList.length; i += 1) {
-        if (this.fileList[i].name === file.name) {
+      for (let i = 0; i < this.files.length; i += 1) {
+        if (this.files[i].name === file.name) {
           this.$message.error('文件已存在');
           return;
         }
@@ -62,14 +53,14 @@ export default {
         this.$message.error('文件不能大于10M');
         return;
       }
-      if (this.fileList.length >= 10) {
+      if (this.files.length >= 10) {
         this.$message.error('最多只能上传10个文件');
         return;
       }
-      this.fileList.push(file);
+      this.$emit('change', this.files.concat(file));
     },
     removeFile(name) {
-      this.fileList = this.fileList.filter(item => item.name !== name);
+      this.$emit('change', this.files.filter(item => item.name !== name));
     },
   },
 };
