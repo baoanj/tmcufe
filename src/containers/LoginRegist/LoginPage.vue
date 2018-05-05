@@ -10,15 +10,16 @@
       :rules="rules"
       ref="ruleForm"
       label-width="100px"
+      @keyup.enter.native="submitForm('ruleForm')"
     >
       <el-form-item label="邮箱" prop="email">
-        <el-input v-model="ruleForm.email" auto-complete="on"></el-input>
+        <el-input v-model="ruleForm.email" auto-complete="on" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="ruleForm.password"></el-input>
+        <el-input type="password" v-model="ruleForm.password" />
       </el-form-item>
       <el-form-item class="captcha-form-item" label="验证码" prop="captcha">
-        <el-input class="captcha-input" v-model="ruleForm.captcha"></el-input>
+        <el-input class="captcha-input" v-model="ruleForm.captcha" />
         <span @click="getCaptchaSVG" v-html="captchaSVG"></span>
       </el-form-item>
       <el-form-item>

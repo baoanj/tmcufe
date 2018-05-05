@@ -12,10 +12,11 @@
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
     "build": "node build/build.js",
+    "eslint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
     "lint:staged": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,vue}": "lint"
+    "*.{js,vue}": "eslint"
   },
   "pre-commit": "lint:staged",
   "dependencies": {

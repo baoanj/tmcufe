@@ -11,6 +11,7 @@
         :rules="rules"
         ref="ruleForm"
         label-width="100px"
+        @keyup.enter.native="submitForm('ruleForm')"
       >
         <el-form-item label="新密码" prop="password">
           <el-input
@@ -20,7 +21,7 @@
           />
         </el-form-item>
         <el-form-item label="确认新密码" prop="checkPass">
-          <el-input type="password" v-model="ruleForm.checkPass"></el-input>
+          <el-input type="password" v-model="ruleForm.checkPass" />
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
