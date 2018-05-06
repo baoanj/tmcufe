@@ -8,8 +8,8 @@ export function getClassHwsData(classId) {
       } else {
         reject(result.data.error);
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }
@@ -22,8 +22,8 @@ export function addHomework(classId, params) {
       } else {
         resolve();
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }
@@ -36,8 +36,8 @@ export function uploadCourseware(classId, params) {
       } else {
         resolve();
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }
@@ -50,8 +50,8 @@ export function updateCoursewareApi(classId, uploadDate, params) {
       } else {
         resolve();
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }
@@ -64,8 +64,8 @@ export function deleteCoursewareApi(classId, uploadDate, params) {
       } else {
         resolve();
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }
@@ -78,8 +78,8 @@ export function updateClassMsg(classId, params) {
       } else {
         resolve();
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }
@@ -92,8 +92,8 @@ export function getStuSubs(classId, userId) {
       } else {
         reject(result.data.error);
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }
@@ -106,8 +106,8 @@ export function updateClassTas(classId, params) {
       } else {
         resolve();
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }

@@ -10,8 +10,8 @@ export function uerLogout() {
           resolve();
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }
@@ -26,8 +26,8 @@ export function editNameStuId(params) {
           resolve();
         }
       })
-      .catch(() => {
-        resolve();
+      .catch((error) => {
+        reject(error);
       });
   });
 }

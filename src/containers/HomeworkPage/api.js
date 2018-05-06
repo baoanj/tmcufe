@@ -10,8 +10,8 @@ export function getHwSubsData(classId, createDate) {
           reject(result.data.error);
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }
@@ -24,8 +24,8 @@ export function submitHw(classId, createDate, params) {
       } else {
         resolve();
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }
@@ -38,8 +38,8 @@ export function updateAnswerApi(classId, createDate, params) {
       } else {
         resolve();
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }
@@ -52,8 +52,8 @@ export function deleteHwSubApi(classId, createDate, params) {
       } else {
         resolve();
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }
@@ -68,8 +68,8 @@ export function checkStuSub(classId, createDate, userId, feedback) {
       } else {
         resolve();
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }
@@ -82,8 +82,8 @@ export function uploadHwAnswer(classId, createDate, params) {
       } else {
         resolve();
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }
@@ -96,8 +96,8 @@ export function deleteHwAnswer(classId, createDate) {
       } else {
         resolve();
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }
@@ -110,8 +110,8 @@ export function updateHomeworkMsg(classId, createDate, params) {
       } else {
         resolve();
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }
@@ -124,8 +124,8 @@ export function updateHwDraft(classId, createDate, params) {
       } else {
         resolve();
       }
-    }).catch(() => {
-      reject('网络错误');
+    }).catch((error) => {
+      reject(error);
     });
   });
 }

@@ -2,6 +2,22 @@
 
 > 基于现代Web技术的高校教学管理系统前端项目
 
+## yarn基本命令
+```bash
+yarn                    # 相当于 npm install
+yarn add <module>       # 相当于 npm install <module> --save
+yarn add <module> --dev # 相当于 npm install <module> --save-dev
+yarn remove <module>    # 相当于 npm uninstall <module> --save
+```
+
+## 启动项目
+```bash
+git clone https://github.com/baoanj/tmcufe.git
+cd tmcufe
+yarn
+npm run dev
+```
+
 ## Build Setup
 
 ``` bash

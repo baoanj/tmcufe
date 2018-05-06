@@ -10,8 +10,8 @@ export function registUser(params) {
           resolve();
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }
@@ -26,8 +26,8 @@ export function loginUser(params) {
           resolve();
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }
@@ -42,8 +42,8 @@ export function checkEmailExist(email) {
           resolve();
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }
@@ -58,8 +58,8 @@ export function getCaptcha() {
           resolve(result.data.captcha);
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }
@@ -74,8 +74,8 @@ export function checkCaptcha(captcha) {
           resolve();
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }
@@ -90,8 +90,8 @@ export function forgotPass(params) {
           resolve();
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }
@@ -106,8 +106,8 @@ export function checkResetValid(resetId) {
           resolve();
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }
@@ -122,8 +122,8 @@ export function resetPass(resetId, params) {
           resolve();
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }
@@ -138,8 +138,8 @@ export function sendEmailAgain(params) {
           resolve();
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }
@@ -154,8 +154,8 @@ export function activateEmail(activateId) {
           resolve();
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }

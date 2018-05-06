@@ -10,8 +10,8 @@ export function getClasses() {
           reject(result.data.error);
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }
@@ -26,8 +26,8 @@ export function addClass(params) {
           resolve();
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }
@@ -42,8 +42,8 @@ export function submitMoveClasses(params) {
           resolve();
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }
@@ -74,8 +74,8 @@ export function enterClass(params) {
           resolve();
         }
       })
-      .catch(() => {
-        reject('网络错误');
+      .catch((error) => {
+        reject(error);
       });
   });
 }
