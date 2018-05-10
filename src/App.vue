@@ -108,7 +108,7 @@ $back-top-size: 40px;
   margin-top: $header-height;
   min-width: $app-min-width;
   background-color: $container-background-color;
-  min-height: calc(100vh - $header-height);
+  min-height: calc(100vh - #{$header-height});
   overflow: hidden;
 }
 
